@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Engineer — Product and Project Manager Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f3ee;
+    --surface: #ffffff;
+    --surface2: #f0ede6;
+    --ink: #1a1916;
+    --ink2: #5a5751;
+    --ink3: #9a9691;
+    --accent: #1a56db;
+    --accent-light: #dce9ff;
+    --accent-dark: #0e3a9e;
+    --amber: #c47a1a;
+    --amber-light: #fdf0d5;
+    --green: #1a7a4a;
+    --green-light: #d6f0e3;
+    --border: rgba(26,25,22,0.1);
+    --border-med: rgba(26,25,22,0.18);
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: var(--ink);
+    color: #f5f3ee;
+    padding: 0 2rem;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .topbar-brand {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #f5f3ee;
+  }
+  .topbar-brand span { color: #6b9fff; }
+
+  .lang-switcher {
+    display: flex;
+    gap: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 4px;
+  }
+  .lang-btn {
+    background: transparent;
+    border: none;
+    color: rgba(245,243,238,0.55);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.02em;
+  }
+  .lang-btn:hover { color: #f5f3ee; background: rgba(255,255,255,0.1); }
+  .lang-btn.active { background: #1a56db; color: #fff; }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--ink);
+    color: #f5f3ee;
+    padding: 3.5rem 2rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -80px;
+    width: 360px; height: 360px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(26,86,219,0.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-inner { max-width: 860px; margin: 0 auto; position: relative; }
+  .hero-eyebrow {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #6b9fff;
+    margin-bottom: 12px;
+  }
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    line-height: 1.08;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+  .hero-title em { font-style: normal; color: #6b9fff; }
+  .hero-sub {
+    font-size: 16px;
+    font-weight: 300;
+    color: rgba(245,243,238,0.65);
+    max-width: 520px;
+    line-height: 1.65;
+    margin-bottom: 2rem;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 0.5px solid rgba(245,243,238,0.12);
+  }
+  .stat { }
+  .stat-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #f5f3ee;
+    line-height: 1;
+  }
+  .stat-lbl { font-size: 12px; color: rgba(245,243,238,0.45); margin-top: 3px; letter-spacing: 0.03em; }
+
+  /* ── PROGRESS ── */
+  .progress-section {
+    background: var(--surface);
+    border-bottom: 0.5px solid var(--border);
+    padding: 1rem 2rem;
+  }
+  .progress-section-inner { max-width: 860px; margin: 0 auto; }
+  .prog-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .prog-title { font-size: 13px; font-weight: 500; color: var(--ink); }
+  .prog-count { font-size: 12px; color: var(--ink3); }
+  .prog-track {
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .prog-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 6px;
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+    width: 0%;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .main { max-width: 860px; margin: 0 auto; padding: 2rem; }
+
+  /* ── BLOCK NAV ── */
+  .block-nav {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .bnav-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 13px;
+    border-radius: 30px;
+    border: 1px solid var(--border-med);
+    background: var(--surface);
+    color: var(--ink2);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .bnav-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .bnav-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .bnav-btn.done { background: var(--green-light); border-color: var(--green); color: var(--green); }
+  .bnav-btn.done.active { background: var(--green); color: #fff; }
+
+  /* ── BLOCK CARD ── */
+  .block-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    animation: fadeIn 0.25s ease;
+  }
+  @keyframes fadeIn { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform:none; } }
+
+  .block-header {
+    padding: 1.75rem 2rem 1.5rem;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .block-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-light);
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+  .block-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+  .block-desc { font-size: 15px; color: var(--ink2); line-height: 1.65; }
+
+  .block-body { padding: 1.5rem 2rem; }
+
+  .pm-note {
+    background: var(--amber-light);
+    border-left: 3px solid var(--amber);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #5a3a08;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+  .pm-note strong { color: #3a2405; font-weight: 500; }
+
+  .topics-wrap { margin-bottom: 1.5rem; }
+  .topics-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink3);
+    margin-bottom: 8px;
+  }
+  .chip {
+    display: inline-block;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: var(--surface2);
+    color: var(--ink2);
+    border: 0.5px solid var(--border);
+    margin: 2px 3px 2px 0;
+  }
+
+  /* ── EXERCISE ── */
+  .exercise {
+    background: var(--surface2);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-top: 0.5rem;
+  }
+  .ex-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 0.5px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .ex-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .ex-meta {
+    font-size: 12px;
+    color: var(--ink3);
+    margin-top: 3px;
+  }
+  .ex-badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: var(--accent-light);
+    color: var(--accent-dark);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .ex-steps { padding: 1.25rem 1.5rem; }
+  .step {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+    align-items: flex-start;
+  }
+  .step:last-child { margin-bottom: 0; }
+  .step-num {
+    min-width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-body { font-size: 14px; color: var(--ink); line-height: 1.65; flex: 1; }
+  .step-code {
+    font-family: 'DM Mono', 'Courier New', monospace;
+    font-size: 12px;
+    background: var(--ink);
+    color: #c8e4ff;
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    margin: 8px 0 0;
+    display: block;
+    white-space: pre-wrap;
+    line-height: 1.7;
+  }
+
+  .deliverable {
+    margin: 1.25rem 1.5rem;
+    padding: 12px 16px;
+    background: var(--green-light);
+    border-left: 3px solid var(--green);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-size: 14px;
+    color: #0e4a2a;
+    line-height: 1.6;
+  }
+  .deliverable strong { font-weight: 500; color: #08301a; }
+
+  .ex-footer {
+    padding: 1rem 1.5rem;
+    border-top: 0.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .check-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--ink2);
+  }
+  .check-label input { width: 16px; height: 16px; cursor: pointer; accent-color: var(--green); }
+
+  /* ── NAV BUTTONS ── */
+  .nav-btns {
+    display: flex;
+    gap: 8px;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 9px 18px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 1px solid transparent;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-primary { background: var(--ink); color: #f5f3ee; border-color: var(--ink); }
+  .btn-primary:hover { background: #2d2c28; }
+  .btn-outline { background: var(--surface); color: var(--ink); border-color: var(--border-med); }
+  .btn-outline:hover { border-color: var(--ink); }
+
+  .hero-blocks-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 2.5rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 0.5px solid rgba(245,243,238,0.12);
+  }
+  @media (max-width: 640px) {
+    .hero-blocks-grid { grid-template-columns: 1fr; }
+  }
+  .hero-block-item {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 14px;
+    color: rgba(245,243,238,0.8);
+    line-height: 1.6;
+  }
+  .hero-block-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #6b9fff;
+    flex-shrink: 0;
+    min-width: 20px;
+  }
+
+  .topics-wrap { margin-bottom: 1.5rem; position: relative; }
+  .chips-wrap { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+  .chip {
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .chip:hover {
+    background: var(--accent-light);
+    border-color: var(--accent);
+    color: var(--accent-dark);
+    transform: translateY(-1px);
+  }
+  .chip.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .topic-panel {
+    display: none;
+    background: var(--accent-light);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-top: 8px;
+    animation: fadeIn 0.2s ease;
+  }
+  .topic-panel.open { display: block; }
+  .topic-panel-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--accent-dark);
+    margin-bottom: 6px;
+  }
+  .topic-panel-desc {
+    font-size: 13px;
+    color: var(--ink2);
+    line-height: 1.65;
+    margin-bottom: 10px;
+  }
+  .topic-panel-links {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .topic-link {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border-med);
+    background: var(--surface);
+    color: var(--ink2);
+    text-decoration: none;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .topic-link:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .topic-link.gemini {
+    border-color: #4285f4;
+    color: #4285f4;
+  }
+  .topic-link.gemini:hover {
+    background: #e8f0fe;
+  }
+  .topic-link.yt {
+    border-color: #ff0000;
+    color: #cc0000;
+  }
+  .topic-link.yt:hover {
+    background: #fff0f0;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">AI <span>Engineer</span> · PM Edition</div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('en')">English</button>
+    <button class="lang-btn" onclick="setLang('pt')">Português BR</button>
+    <button class="lang-btn" onclick="setLang('es')">Español</button>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow" data-t="eyebrow">Adapted for Product & Project Managers</div>
+    <h1 class="hero-title" data-t="heroTitle">Máster <em>AI Engineer</em><br>PM Edition</h1>
+    <p class="hero-sub" data-t="heroSub">The complete programme to go from AI prototypes to production-grade architectures — adapted for Product & Project Managers with step-by-step, no-code exercises.</p>
+    <div id="hero-blocks-list" class="hero-blocks-grid">
+      <!-- Block titles will be rendered here by JS -->
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="progress-section">
+  <div class="progress-section-inner">
+    <div class="prog-row">
+      <span class="prog-title" data-t="progressTitle">Your progress</span>
+      <span class="prog-count" id="prog-count">0 / 7</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="block-nav" id="block-nav"></div>
+  <div id="block-content"></div>
+</div>
+
+<script>
+const T = {
+  en: {
+    eyebrow: "Adapted for Product & Project Managers",
+    heroTitle: null,
+    heroSub: "The complete programme to go from AI prototypes to production-grade architectures — adapted for Product & Project Managers with step-by-step, no-code exercises.",
+    statBlocks: "Blocks", statProjects: "Portfolio projects", progressTitle: "Your progress",
+    pmLabel: "Product &amp; Project Manager perspective",
+    topicsLabel: "Topics covered",
+    deliverableLabel: "Deliverable",
+    checkLabel: "I have completed this exercise and created the deliverable",
+    prevBtn: "← Previous block", nextBtn: "Next block →",
+    noCode: "No coding required",
+    blocks: [
+      {
+        tag: "Block 1", title: "Foundations of AI Engineering", desc: "Understand what AI Engineering actually is, how LLMs work, and where your role as a Product &amp; Project Manager fits. You will learn the vocabulary used by AI teams so you can lead and communicate with them effectively.",
+        pmNote: "As a PM, your goal here is not to code — it is to understand the landscape. Think of this like learning financial basics before managing a budget. You do not need to become an accountant, but you must understand balance sheets.",
+        topics: ["What is an LLM", "Tokens & context windows", "APIs and endpoints", "Prompt engineering basics", "AI vs ML vs Data Science", "Cost & latency trade-offs"],
+        exTitle: "Exercise: Map an AI use case to your project", exMeta: "45 min",
+        steps: [
+          { text: "Open ChatGPT or Claude in your browser. This is your test environment." },
+          { text: "Think of a repetitive task in your current project (e.g. writing meeting summaries, drafting status updates, classifying support tickets)." },
+          { text: "Write a prompt asking the AI to do that task. Example:", code: "You are a project assistant. Read this meeting transcript\nand extract: 1) decisions made, 2) action items with owners,\n3) blockers raised.\n\nTranscript: [paste text here]" },
+          { text: "Run it 3 times with slightly different wording. Notice how the output changes. This is your first experience with 'prompt sensitivity'." },
+          { text: "Open a text document and write a short summary: What did the AI get right? What did it get wrong? What would it need to be truly useful?" },
+          { text: "Document your findings and keep them as a reference. Your Product &amp; Project Manager perspective on AI limitations is extremely valuable to the technical team." }
+        ],
+        deliverable: "A one-page use-case brief: problem statement, AI approach, expected benefit, and risks."
+      },
+      {
+        tag: "Block 2", title: "Architecture & Frameworks", desc: "Learn how AI systems are designed end-to-end. You will understand LangChain and LangGraph — the main frameworks teams use to build AI workflows — and how to read and critique an AI architecture diagram.",
+        pmNote: "This is the equivalent of learning how a project's tech stack is structured before writing a technical spec. You will not write the framework code, but you will be able to review architecture proposals, ask the right questions, and spot risks.",
+        topics: ["LangChain basics", "LangGraph for workflows", "Agents and chains", "State machines", "Tool calling", "Orchestration patterns"],
+        exTitle: "Exercise: Draw an AI workflow for a real use case", exMeta: "60 min",
+        steps: [
+          { text: "Pick a business process in your organisation that currently involves several manual steps (e.g. customer complaint handling, report generation, onboarding)." },
+          { text: "Open a free tool: draw.io (app.diagrams.net) or PowerPoint. You will create a flow diagram." },
+          { text: "Map the current process as boxes and arrows. Label each step with: who does it, how long it takes, and what the output is." },
+          { text: "Now redesign the same flow with AI. Replace manual steps with AI nodes. Label each AI node with: what input it receives, what it produces, and what tool it uses." },
+          { text: "Add a 'human-in-the-loop' checkpoint — a point where a human reviews before the AI continues. This is a key architecture decision.", code: "Example flow:\nUser submits complaint\n→ AI categorises severity\n→ [IF high severity → human review]\n→ AI drafts response\n→ AI sends reply\n→ AI logs outcome" },
+          { text: "Present your diagram and explain: why did you place the human checkpoint where you did? This is an AI architecture decision." }
+        ],
+        deliverable: "An AI workflow diagram with current vs. proposed state and justification for human checkpoints."
+      },
+      {
+        tag: "Block 3", title: "Models & Data", desc: "Understand how AI models are chosen, what data they need, and how data quality affects output. Learn to evaluate model fit for a use case without running the models yourself.",
+        pmNote: "Data is the biggest risk in any AI project. As a Product &amp; Project Manager you are responsible for data availability, quality, and compliance. This block gives you the framework to manage data requirements like any other project dependency.",
+        topics: ["Model selection criteria", "Open vs closed models", "Data pipelines", "Data quality metrics", "Embeddings", "Vector databases intro"],
+        exTitle: "Exercise: Write a data requirements document", exMeta: "75 min",
+        steps: [
+          { text: "Choose the AI use case from Block 1. Now you will define its data requirements." },
+          { text: "Open a document and create these 4 sections: Data Sources, Data Quality, Data Volume, and Compliance." },
+          { text: "Fill in Data Sources: List every data source the AI will need. For each, write: where it lives, who owns it, and whether access has been granted.", code: "Example:\n- Customer emails → CRM → owned by Sales → access: TBD\n- Product catalogue → internal DB → owned by Ops → access: granted\n- Support history → Zendesk → owned by CS → needs GDPR review" },
+          { text: "Fill in Data Quality: For each source, estimate: Is it structured or unstructured? Is it complete? Is it up to date? Rate each 1–5." },
+          { text: "Fill in Data Volume: How many records exist? How many will be added monthly? This affects infrastructure cost." },
+          { text: "Fill in Compliance: Does the data contain PII? Is it covered by GDPR or other regulations? Who needs to sign off?" },
+          { text: "Add a 'data readiness score' (1–10) and a list of blockers to resolve before the AI project can begin." }
+        ],
+        deliverable: "A data requirements document with readiness score and blocker list — ready to share with your engineering team."
+      },
+      {
+        tag: "Block 4", title: "RAG & Multimodality", desc: "Learn Retrieval-Augmented Generation (RAG) — the technique that lets AI answer questions using your organisation's own documents. Also explore multimodal AI that handles text, images, and audio.",
+        pmNote: "RAG is the most practical AI technique for most business use cases. If your company has documents, policies, or knowledge bases, RAG is how you make AI 'know' them without retraining. This has major implications for scope, cost, and timeline.",
+        topics: ["What is RAG", "Vector search", "Document chunking", "pgvector / Pinecone", "Reranking", "Multimodal inputs"],
+        exTitle: "Exercise: Define a RAG use case and scope it as a project", exMeta: "90 min",
+        steps: [
+          { text: "Identify a knowledge base in your organisation: an internal wiki, policy library, product manual, or set of FAQs." },
+          { text: "Write a one-paragraph problem statement: 'Employees currently struggle to find X because Y. An AI assistant that can answer questions using our Z documents would save W hours per week.'" },
+          { text: "List the documents that will go into the RAG system. For each: format (PDF, Word, web), estimated pages, update frequency, and owner." },
+          { text: "Define the user experience: How will employees interact with the AI? Write 3 example questions a user would ask.", code: "Example questions:\n1. 'What is our policy on remote work expense claims?'\n2. 'How do I request a software licence?'\n3. 'What is the SLA for P1 incidents?'" },
+          { text: "Create a basic project timeline with these milestones: Data collection, Data cleaning, RAG prototype, User testing, Production deployment. Estimate duration for each." },
+          { text: "Identify 3 risks specific to RAG: data staleness, hallucination, and scope creep. Write a mitigation for each." }
+        ],
+        deliverable: "A RAG project brief: problem, documents, user stories, timeline, and risk register."
+      },
+      {
+        tag: "Block 5", title: "Fine-Tuning & MLOps", desc: "Understand when and why to fine-tune a model versus using RAG. Learn MLOps — the practice of running AI systems reliably in production, like DevOps but for AI.",
+        pmNote: "Fine-tuning is expensive and slow. RAG is cheaper and faster. As a Product &amp; Project Manager, knowing the trade-offs lets you push back on over-engineering and keep projects on budget. MLOps is your operational risk framework — it determines whether your AI stays reliable after launch.",
+        topics: ["Fine-tuning vs RAG", "LoRA and QLoRA", "MLflow for tracking", "ZenML pipelines", "Model versioning", "Experiment management"],
+        exTitle: "Exercise: Build a fine-tuning vs RAG decision framework", exMeta: "60 min",
+        steps: [
+          { text: "Open a spreadsheet or table. You will create a decision matrix to help your team choose between RAG and fine-tuning for any use case." },
+          { text: "Create these columns: Use case, Data available, Update frequency, Latency need, Budget, Recommended approach." },
+          { text: "Learn the criteria for each approach:", code: "Fine-Tuning is better when:\n- You need a specific style/tone the model doesn't have\n- Highly specialised domain vocabulary is needed\n- Budget allows > €5,000 for training\n\nRAG is better when:\n- Knowledge changes frequently\n- Documents already exist\n- Budget is limited\n- You need to cite sources" },
+          { text: "Add 5 hypothetical use cases from your industry. For each, go through every criterion and mark RAG or Fine-tune." },
+          { text: "Calculate a simple score: 1 point per criterion met. The approach with more points wins." },
+          { text: "Add a column for 'MLOps requirements': What monitoring will this system need after launch? Who owns it? How is model performance measured?" }
+        ],
+        deliverable: "A reusable decision matrix: RAG vs fine-tuning for 5 use cases, with MLOps ownership defined."
+      },
+      {
+        tag: "Block 6", title: "Cloud & Production", desc: "Learn how AI systems are deployed to cloud infrastructure (AWS, GCP, Azure), how CI/CD pipelines work for AI, and how to monitor production systems. Understand costs, scaling, and reliability.",
+        pmNote: "Production deployment is where most AI projects either succeed or quietly die. As a Product &amp; Project Manager, you own the go-live plan, the rollback strategy, and the success metrics. This block gives you the vocabulary to define these clearly with your DevOps team.",
+        topics: ["AWS / GCP / Azure basics", "Docker containers", "CI/CD for AI", "API deployment", "Monitoring & alerts", "Cost optimisation"],
+        exTitle: "Exercise: Write a production readiness checklist", exMeta: "75 min",
+        steps: [
+          { text: "A 'production readiness checklist' is the gate between 'it works on my machine' and 'it is live for real users'. Create one for your AI project." },
+          { text: "Section 1 — Infrastructure:", code: "[ ] Cloud provider selected (AWS / GCP / Azure)\n[ ] Environments defined (dev / staging / production)\n[ ] Compute resources sized (CPUs, GPUs, RAM)\n[ ] Storage provisioned for model and data\n[ ] Network security reviewed" },
+          { text: "Section 2 — Reliability:", code: "[ ] Auto-scaling configured (handles traffic spikes)\n[ ] Failover plan documented\n[ ] Rollback procedure tested\n[ ] SLA defined (e.g. 99.9% uptime)" },
+          { text: "Section 3 — Monitoring:", code: "[ ] Response latency tracked (alert if > X seconds)\n[ ] Error rate tracked (alert if > Y% fail)\n[ ] AI output quality tracked (human review weekly)\n[ ] Cost tracked (alert if spend exceeds budget)" },
+          { text: "Section 4 — Launch plan: Define soft launch (internal only) → limited (10% users) → full launch. Set criteria for each gate." },
+          { text: "Review with your engineering lead. Assign an owner and due date to every unchecked item." }
+        ],
+        deliverable: "A production readiness checklist with owners and due dates — your AI go-live gate."
+      },
+      {
+        tag: "Block 7", title: "Evaluation & Final Project", desc: "Learn how to evaluate AI system quality systematically. Complete your final project: a fully deployed AI system with observability, an API, and deployment on AWS.",
+        pmNote: "Evaluation is the hardest part of AI projects — unlike traditional software, 'does it work?' has no binary answer. This block teaches you how to define, measure, and report AI quality in a way that is meaningful to both technical teams and business stakeholders.",
+        topics: ["LLM evaluation metrics", "RAGAS framework", "A/B testing AI", "Observability", "Final project review", "Portfolio presentation"],
+        exTitle: "Exercise: Define an AI evaluation framework for stakeholders", exMeta: "90 min",
+        steps: [
+          { text: "Create an 'AI Performance Report' template — the document you will share with leadership every month to report on your AI system's health." },
+          { text: "Section 1 — Business metrics (what stakeholders care about):", code: "- Time saved per week (hours)\n- Cost per query (€)\n- User satisfaction score (1–5)\n- Tasks automated vs manual baseline\n- Error rate reported by users" },
+          { text: "Section 2 — Technical quality metrics (translated for non-technical readers):", code: "- Relevance: 'Are the answers on-topic?' (target > 0.8)\n- Faithfulness: 'Does the AI make things up?' (target > 0.9)\n- Latency: 'How fast does it respond?' (target < 3 sec)\n- Uptime: 'Was it available?' (target > 99.5%)" },
+          { text: "Section 3 — Monthly trend table: Create columns for Month, Relevance, Faithfulness, Latency, Uptime, Cost, User score. Fill in 3 months of hypothetical data to test the format." },
+          { text: "Section 4 — Actions: For any metric below target, list: the problem, root cause hypothesis, action taken, and expected recovery date." },
+          { text: "Submit your three portfolio projects: the AI workflow diagram (Block 2), the RAG project brief (Block 4), and this evaluation framework. Together they demonstrate AI Engineering management competency." }
+        ],
+        deliverable: "An AI Performance Report template — your ongoing governance tool for AI in production."
+      }
+    ]
+  },
+
+  pt: {
+    eyebrow: "Adaptado para Gerentes de Produto e Projeto",
+    heroSub: "O programa completo para passar de protótipos com IA para arquiteturas em produção — adaptado para Gerentes de Produto e Projeto com exercícios passo a passo sem necessidade de código.",
+    statBlocks: "Blocos", statProjects: "Projetos para portfólio", progressTitle: "Seu progresso",
+    pmLabel: "Perspectiva do Gerente P&amp;PM",
+    topicsLabel: "Tópicos abordados",
+    deliverableLabel: "Entregável",
+    checkLabel: "Concluí este exercício e criei o entregável",
+    prevBtn: "← Bloco anterior", nextBtn: "Próximo bloco →",
+    noCode: "Sem necessidade de código",
+    blocks: [
+      {
+        tag: "Bloco 1", title: "Fundamentos de AI Engineering", desc: "Entenda o que é AI Engineering, como os LLMs funcionam e qual é o seu papel como Gerente de Produto e Projeto. Você aprenderá o vocabulário usado pelas equipes de IA para liderar e se comunicar com eficácia.",
+        pmNote: "Como GP, seu objetivo aqui não é programar — é entender o cenário. Pense nisso como aprender conceitos financeiros básicos antes de gerenciar um orçamento. Você não precisa se tornar um contador, mas precisa entender os balanços.",
+        topics: ["O que é um LLM", "Tokens e janelas de contexto", "APIs e endpoints", "Engenharia de prompts", "IA vs ML vs Data Science", "Trade-offs de custo e latência"],
+        exTitle: "Exercício: Mapeie um caso de uso de IA no seu projeto", exMeta: "45 min",
+        steps: [
+          { text: "Abra o ChatGPT ou o Claude no seu navegador. Este é o seu ambiente de testes." },
+          { text: "Pense em uma tarefa repetitiva no seu projeto atual (ex.: escrever resumos de reuniões, redigir atualizações de status, classificar tickets de suporte)." },
+          { text: "Escreva um prompt pedindo que a IA realize essa tarefa. Exemplo:", code: "Você é um assistente de projetos. Leia esta transcrição de reunião\ne extraia: 1) decisões tomadas, 2) itens de ação com responsáveis,\n3) bloqueios identificados.\n\nTranscrição: [cole o texto aqui]" },
+          { text: "Execute 3 vezes com formulações ligeiramente diferentes. Observe como a saída muda. Esta é a sua primeira experiência com 'sensibilidade ao prompt'." },
+          { text: "Abra um documento e escreva um breve resumo: O que a IA acertou? O que errou? O que precisaria para ser realmente útil?" },
+          { text: "Documente suas descobertas e guarde-as como referência. Sua perspectiva de Gerente de Produto e Projeto sobre as limitações da IA é extremamente valiosa para a equipe técnica." }
+        ],
+        deliverable: "Um briefing de caso de uso de uma página: problema, abordagem de IA, benefício esperado e riscos."
+      },
+      {
+        tag: "Bloco 2", title: "Arquitetura & Frameworks", desc: "Aprenda como os sistemas de IA são projetados de ponta a ponta. Você entenderá o LangChain e o LangGraph — os principais frameworks que as equipes usam para construir fluxos de trabalho com IA.",
+        pmNote: "Isso equivale a aprender como o stack tecnológico de um projeto é estruturado antes de escrever uma especificação técnica. Você não escreverá o código do framework, mas poderá revisar propostas de arquitetura, fazer as perguntas certas e identificar riscos.",
+        topics: ["Básico de LangChain", "LangGraph para fluxos", "Agentes e cadeias", "Máquinas de estado", "Tool calling", "Padrões de orquestração"],
+        exTitle: "Exercício: Desenhe um fluxo de trabalho de IA para um caso real", exMeta: "60 min",
+        steps: [
+          { text: "Escolha um processo de negócio na sua organização que envolva vários passos manuais (ex.: atendimento a reclamações, geração de relatórios, onboarding)." },
+          { text: "Abra o draw.io (app.diagrams.net) ou o PowerPoint. Você criará um fluxograma." },
+          { text: "Mapeie o processo atual como caixas e setas. Rotule cada etapa com: quem faz, quanto tempo leva e qual é o resultado." },
+          { text: "Agora redesenhe o mesmo fluxo com IA. Substitua etapas manuais por nós de IA. Rotule cada nó com: qual input recebe, o que produz e qual ferramenta usa." },
+          { text: "Adicione um ponto de 'revisão humana' — um momento em que uma pessoa revisa antes que a IA continue. Esta é uma decisão chave de arquitetura.", code: "Exemplo de fluxo:\nUsuário envia reclamação\n→ IA categoriza a gravidade\n→ [SE alta gravidade → revisão humana]\n→ IA redige resposta\n→ IA envia resposta\n→ IA registra resultado" },
+          { text: "Apresente o diagrama e explique: por que você colocou o ponto de revisão humana ali? Esta é uma decisão de arquitetura de IA." }
+        ],
+        deliverable: "Um diagrama de fluxo de IA com o estado atual vs. proposto e justificativa para os pontos de revisão humana."
+      },
+      {
+        tag: "Bloco 3", title: "Modelos & Dados", desc: "Entenda como os modelos de IA são escolhidos, quais dados precisam e como a qualidade dos dados afeta os resultados. Aprenda a avaliar a adequação de um modelo para um caso de uso.",
+        pmNote: "Os dados são o maior risco em qualquer projeto de IA. Como Gerente de Produto e Projeto, você é responsável pela disponibilidade, qualidade e conformidade dos dados. Este bloco fornece o framework para gerenciar requisitos de dados como qualquer outra dependência do projeto.",
+        topics: ["Critérios de seleção de modelos", "Modelos abertos vs fechados", "Pipelines de dados", "Métricas de qualidade de dados", "Embeddings", "Bancos vetoriais"],
+        exTitle: "Exercício: Escreva um documento de requisitos de dados", exMeta: "75 min",
+        steps: [
+          { text: "Escolha o caso de uso de IA do Bloco 1. Agora você vai definir os requisitos de dados." },
+          { text: "Abra um documento e crie estas 4 seções: Fontes de Dados, Qualidade dos Dados, Volume de Dados e Conformidade." },
+          { text: "Preencha Fontes de Dados: liste cada fonte que a IA precisará. Para cada uma: onde está, quem é o responsável, se o acesso foi concedido.", code: "Exemplo:\n- E-mails de clientes → CRM → responsável: Vendas → acesso: pendente\n- Catálogo de produtos → BD interno → responsável: Ops → acesso: concedido\n- Histórico de suporte → Zendesk → responsável: CS → requer revisão LGPD" },
+          { text: "Preencha Qualidade dos Dados: para cada fonte, estime: é estruturada ou não estruturada? Está completa? Está atualizada? Avalie de 1 a 5." },
+          { text: "Preencha Volume de Dados: quantos registros existem? Quantos serão adicionados mensalmente? Isso afeta o custo de infraestrutura." },
+          { text: "Preencha Conformidade: os dados contêm PII? Estão cobertos pela LGPD ou outras regulamentações? Quem precisa aprovar?" },
+          { text: "Adicione uma 'pontuação de prontidão de dados' (1–10) e uma lista de bloqueios a resolver antes do início do projeto." }
+        ],
+        deliverable: "Um documento de requisitos de dados com pontuação de prontidão e lista de bloqueios — pronto para compartilhar com a equipe de engenharia."
+      },
+      {
+        tag: "Bloco 4", title: "RAG & Multimodalidade", desc: "Aprenda o RAG (Retrieval-Augmented Generation) — a técnica que permite que a IA responda perguntas usando os documentos da sua organização. Explore também IA multimodal com texto, imagens e áudio.",
+        pmNote: "RAG é a técnica de IA mais prática para a maioria dos casos de uso de negócios. Se sua empresa tem documentos, políticas ou bases de conhecimento, RAG é a forma de fazer a IA 'conhecê-los' sem retreinamento. Isso tem grandes implicações para escopo, custo e prazo.",
+        topics: ["O que é RAG", "Busca vetorial", "Chunking de documentos", "pgvector / Pinecone", "Reranking", "Entradas multimodais"],
+        exTitle: "Exercício: Defina um caso de uso RAG e escope como projeto", exMeta: "90 min",
+        steps: [
+          { text: "Identifique uma base de conhecimento na sua organização: wiki interna, biblioteca de políticas, manual de produto ou FAQs." },
+          { text: "Escreva um parágrafo de definição do problema: 'Os funcionários atualmente têm dificuldade em encontrar X porque Y. Um assistente de IA que responde perguntas usando nossos documentos Z economizaria W horas por semana.'" },
+          { text: "Liste os documentos que entrarão no sistema RAG. Para cada um: formato (PDF, Word, web), estimativa de páginas, frequência de atualização e responsável." },
+          { text: "Defina a experiência do usuário: como os funcionários interagirão com a IA? Escreva 3 perguntas de exemplo.", code: "Perguntas de exemplo:\n1. 'Qual é nossa política de reembolso de home office?'\n2. 'Como solicito uma licença de software?'\n3. 'Qual é o SLA para incidentes P1?'" },
+          { text: "Crie um cronograma básico com estes marcos: Coleta de dados, Limpeza, Protótipo RAG, Testes com usuários, Deploy em produção. Estime a duração de cada um." },
+          { text: "Identifique 3 riscos específicos do RAG: dados desatualizados, alucinação e escopo crescente. Escreva uma mitigação para cada um." }
+        ],
+        deliverable: "Um briefing de projeto RAG: problema, documentos, histórias de usuário, cronograma e registro de riscos."
+      },
+      {
+        tag: "Bloco 5", title: "Fine-Tuning & MLOps", desc: "Entenda quando e por que fazer fine-tuning de um modelo versus usar RAG. Aprenda MLOps — a prática de operar sistemas de IA de forma confiável em produção.",
+        pmNote: "Fine-tuning é caro e lento. RAG é mais barato e rápido. Como GP, conhecer os trade-offs permite questionar a superengenharia e manter o projeto dentro do orçamento. MLOps é o seu framework de risco operacional — determina se sua IA permanecerá confiável após o lançamento.",
+        topics: ["Fine-tuning vs RAG", "LoRA e QLoRA", "MLflow para rastreamento", "Pipelines com ZenML", "Versionamento de modelos", "Gestão de experimentos"],
+        exTitle: "Exercício: Crie um framework de decisão fine-tuning vs RAG", exMeta: "60 min",
+        steps: [
+          { text: "Abra uma planilha. Você criará uma matriz de decisão para ajudar sua equipe a escolher entre RAG e fine-tuning." },
+          { text: "Crie estas colunas: Caso de uso, Dados disponíveis, Frequência de atualização, Necessidade de latência, Orçamento, Abordagem recomendada." },
+          { text: "Aprenda os critérios de cada abordagem:", code: "Fine-Tuning é melhor quando:\n- Precisa de estilo/tom específico\n- Vocabulário de domínio muito especializado\n- Orçamento permite > R$30.000 para treinamento\n\nRAG é melhor quando:\n- Conhecimento muda frequentemente\n- Documentos já existem\n- Orçamento é limitado\n- Precisa citar fontes" },
+          { text: "Adicione 5 casos de uso hipotéticos do seu setor. Para cada um, avalie cada critério e marque RAG ou Fine-tune." },
+          { text: "Calcule uma pontuação simples: 1 ponto por critério atendido. A abordagem com mais pontos vence." },
+          { text: "Adicione uma coluna para 'requisitos de MLOps': qual monitoramento este sistema precisará após o lançamento? Quem é o responsável?" }
+        ],
+        deliverable: "Uma matriz de decisão reutilizável: RAG vs fine-tuning para 5 casos de uso, com responsabilidades de MLOps definidas."
+      },
+      {
+        tag: "Bloco 6", title: "Cloud & Produção", desc: "Aprenda como sistemas de IA são implantados em infraestrutura cloud (AWS, GCP, Azure), como funcionam os pipelines de CI/CD para IA e como monitorar sistemas em produção.",
+        pmNote: "O deploy em produção é onde a maioria dos projetos de IA triunfa ou fracassa silenciosamente. Como GP, você é o dono do plano de go-live, da estratégia de rollback e das métricas de sucesso. Este bloco fornece o vocabulário para definir isso claramente com sua equipe de DevOps.",
+        topics: ["Básico de AWS / GCP / Azure", "Containers Docker", "CI/CD para IA", "Deploy de APIs", "Monitoramento & alertas", "Otimização de custos"],
+        exTitle: "Exercício: Escreva um checklist de prontidão para produção", exMeta: "75 min",
+        steps: [
+          { text: "Um 'checklist de prontidão para produção' é a barreira entre 'funciona na minha máquina' e 'está ao vivo para usuários reais'. Crie um para o seu projeto de IA." },
+          { text: "Seção 1 — Infraestrutura:", code: "[ ] Provedor de cloud selecionado (AWS / GCP / Azure)\n[ ] Ambientes definidos (dev / staging / produção)\n[ ] Recursos de computação dimensionados\n[ ] Armazenamento provisionado para modelo e dados\n[ ] Segurança de rede revisada" },
+          { text: "Seção 2 — Confiabilidade:", code: "[ ] Auto-scaling configurado\n[ ] Plano de failover documentado\n[ ] Procedimento de rollback testado\n[ ] SLA definido (ex.: 99,9% de uptime)" },
+          { text: "Seção 3 — Monitoramento:", code: "[ ] Latência de resposta rastreada\n[ ] Taxa de erros rastreada\n[ ] Qualidade do output de IA rastreada\n[ ] Custo rastreado (alerta se ultrapassar orçamento)" },
+          { text: "Seção 4 — Plano de lançamento: Defina soft launch (interno) → limitado (10% dos usuários) → lançamento completo. Estabeleça critérios para cada etapa." },
+          { text: "Revise o checklist com seu tech lead. Atribua um responsável e prazo para cada item não concluído." }
+        ],
+        deliverable: "Um checklist de prontidão para produção com responsáveis e prazos — sua barreira de go-live para IA."
+      },
+      {
+        tag: "Bloco 7", title: "Avaliação & Projeto Final", desc: "Aprenda a avaliar a qualidade de sistemas de IA de forma sistemática. Conclua seu projeto final: um sistema de IA completo com observabilidade, uma API e deploy na AWS.",
+        pmNote: "Avaliação é a parte mais difícil dos projetos de IA — ao contrário do software tradicional, 'funciona?' não tem resposta binária. Este bloco ensina como definir, medir e reportar a qualidade da IA de forma significativa tanto para equipes técnicas quanto para stakeholders de negócio.",
+        topics: ["Métricas de avaliação de LLMs", "Framework RAGAS", "Teste A/B em IA", "Observabilidade", "Revisão do projeto final", "Apresentação do portfólio"],
+        exTitle: "Exercício: Defina um framework de avaliação de IA para stakeholders", exMeta: "90 min",
+        steps: [
+          { text: "Crie um template de 'Relatório de Performance de IA' — o documento que você compartilhará com a liderança mensalmente." },
+          { text: "Seção 1 — Métricas de negócio (o que os stakeholders se importam):", code: "- Tempo economizado por semana (horas)\n- Custo por consulta (R$)\n- Pontuação de satisfação do usuário (1–5)\n- Tarefas automatizadas vs linha de base manual\n- Taxa de erros reportada pelos usuários" },
+          { text: "Seção 2 — Métricas técnicas de qualidade (traduzidas para não técnicos):", code: "- Relevância: 'As respostas são pertinentes?' (meta > 0,8)\n- Fidelidade: 'A IA inventa coisas?' (meta > 0,9)\n- Latência: 'Quão rápido responde?' (meta < 3 seg)\n- Uptime: 'Estava disponível?' (meta > 99,5%)" },
+          { text: "Seção 3 — Tabela de tendência mensal: crie colunas para Mês, Relevância, Fidelidade, Latência, Uptime, Custo, Pontuação do usuário. Preencha 3 meses hipotéticos para testar o formato." },
+          { text: "Seção 4 — Ações: para qualquer métrica abaixo da meta, liste: o problema, hipótese da causa raiz, ação tomada e data esperada de recuperação." },
+          { text: "Envie seus três projetos de portfólio: o diagrama de fluxo de IA (Bloco 2), o briefing do projeto RAG (Bloco 4) e este framework de avaliação." }
+        ],
+        deliverable: "Um template de Relatório de Performance de IA — sua ferramenta de governança contínua para IA em produção."
+      }
+    ]
+  },
+
+  es: {
+    eyebrow: "Adaptado para Product &amp; Project Managers",
+    heroSub: "El programa completo para pasar de prototipos con IA a arquitecturas en producción — adaptado para Product &amp; Project Managers con ejercicios paso a paso sin necesidad de código.",
+    statBlocks: "Bloques", statProjects: "Proyectos para portafolio", progressTitle: "Tu progreso",
+    pmLabel: "Perspectiva del Product &amp; Project Manager",
+    topicsLabel: "Temas del bloque",
+    deliverableLabel: "Entregable",
+    checkLabel: "He completado este ejercicio y he creado el entregable",
+    prevBtn: "← Bloque anterior", nextBtn: "Siguiente bloque →",
+    noCode: "Sin necesidad de código",
+    blocks: [
+      {
+        tag: "Bloque 1", title: "Fundamentos de AI Engineering", desc: "Entiende qué es realmente AI Engineering, cómo funcionan los LLMs y cuál es tu rol como Product &amp; Project Manager. Aprenderás el vocabulario que usan los equipos de IA para poder liderar y comunicarte con ellos de manera efectiva.",
+        pmNote: "Como PM, tu objetivo aquí no es programar, sino entender el panorama. Piénsalo como aprender finanzas básicas antes de gestionar un presupuesto. No necesitas convertirte en contable, pero sí entender los balances.",
+        topics: ["Qué es un LLM", "Tokens y ventanas de contexto", "APIs y endpoints", "Ingeniería de prompts", "IA vs ML vs Data Science", "Trade-offs de coste y latencia"],
+        exTitle: "Ejercicio: Mapea un caso de uso de IA en tu proyecto", exMeta: "45 min",
+        steps: [
+          { text: "Abre ChatGPT o Claude en tu navegador. Este es tu entorno de pruebas." },
+          { text: "Piensa en una tarea repetitiva en tu proyecto actual (ej.: redactar resúmenes de reuniones, actualizar el estado del proyecto, clasificar tickets de soporte)." },
+          { text: "Escribe un prompt pidiendo a la IA que realice esa tarea. Ejemplo:", code: "Eres un asistente de proyectos. Lee esta transcripción de reunión\ny extrae: 1) decisiones tomadas, 2) tareas con responsables,\n3) bloqueos identificados.\n\nTranscripción: [pega el texto aquí]" },
+          { text: "Ejecútalo 3 veces con formulaciones ligeramente distintas. Observa cómo cambia el resultado. Esta es tu primera experiencia con la 'sensibilidad al prompt'." },
+          { text: "Abre un documento y escribe un breve resumen: ¿Qué acertó la IA? ¿Qué falló? ¿Qué necesitaría para ser realmente útil?" },
+          { text: "Comparte tus conclusiones en la próxima sesión en directo. Tu perspectiva de PM sobre las limitaciones de la IA es extremadamente valiosa para el equipo técnico." }
+        ],
+        deliverable: "Un briefing de caso de uso de una página: enunciado del problema, enfoque de IA, beneficio esperado y riesgos."
+      },
+      {
+        tag: "Bloque 2", title: "Arquitectura & Frameworks", desc: "Aprende cómo se diseñan los sistemas de IA de extremo a extremo. Entenderás LangChain y LangGraph — los principales frameworks que los equipos usan para construir flujos de trabajo con IA.",
+        pmNote: "Esto equivale a aprender cómo está estructurado el stack tecnológico de un proyecto antes de escribir una especificación técnica. No escribirás el código del framework, pero podrás revisar propuestas de arquitectura, hacer las preguntas correctas e identificar riesgos.",
+        topics: ["Básico de LangChain", "LangGraph para flujos", "Agentes y cadenas", "Máquinas de estado", "Tool calling", "Patrones de orquestación"],
+        exTitle: "Ejercicio: Dibuja un flujo de trabajo de IA para un caso real", exMeta: "60 min",
+        steps: [
+          { text: "Elige un proceso de negocio en tu organización que actualmente implique varios pasos manuales (ej.: gestión de reclamaciones, generación de informes, onboarding)." },
+          { text: "Abre draw.io (app.diagrams.net) o PowerPoint. Crearás un diagrama de flujo." },
+          { text: "Mapea el proceso actual como cajas y flechas. Etiqueta cada paso con: quién lo hace, cuánto tiempo lleva y cuál es el resultado." },
+          { text: "Ahora rediseña el mismo flujo con IA. Reemplaza los pasos manuales con nodos de IA. Etiqueta cada nodo con: qué input recibe, qué produce y qué herramienta usa." },
+          { text: "Añade un punto de 'revisión humana' — un momento en el que una persona revisa antes de que la IA continúe. Esta es una decisión clave de arquitectura.", code: "Ejemplo de flujo:\nUsuario envía reclamación\n→ IA categoriza gravedad\n→ [SI alta gravedad → revisión humana]\n→ IA redacta respuesta\n→ IA envía respuesta\n→ IA registra resultado" },
+          { text: "Presenta el diagrama y explica: ¿por qué colocaste el punto de revisión humana ahí? Esta es una decisión de arquitectura de IA." }
+        ],
+        deliverable: "Un diagrama de flujo de IA con el estado actual vs. propuesto y justificación de los puntos de revisión humana."
+      },
+      {
+        tag: "Bloque 3", title: "Modelos & Datos", desc: "Entiende cómo se eligen los modelos de IA, qué datos necesitan y cómo la calidad de los datos afecta el resultado. Aprende a evaluar la idoneidad de un modelo para un caso de uso.",
+        pmNote: "Los datos son el mayor riesgo en cualquier proyecto de IA. Como PM, eres responsable de la disponibilidad, calidad y cumplimiento de los datos. Este bloque te da el framework para gestionar los requisitos de datos como cualquier otra dependencia del proyecto.",
+        topics: ["Criterios de selección de modelos", "Modelos abiertos vs cerrados", "Pipelines de datos", "Métricas de calidad de datos", "Embeddings", "Bases de datos vectoriales"],
+        exTitle: "Ejercicio: Redacta un documento de requisitos de datos", exMeta: "75 min",
+        steps: [
+          { text: "Elige el caso de uso de IA del Bloque 1. Ahora vas a definir sus requisitos de datos." },
+          { text: "Abre un documento y crea estas 4 secciones: Fuentes de Datos, Calidad de Datos, Volumen de Datos y Cumplimiento." },
+          { text: "Rellena Fuentes de Datos: lista cada fuente que necesitará la IA. Para cada una: dónde está, quién es el responsable y si el acceso ha sido concedido.", code: "Ejemplo:\n- Emails de clientes → CRM → responsable: Ventas → acceso: pendiente\n- Catálogo de productos → BD interna → responsable: Ops → acceso: concedido\n- Historial de soporte → Zendesk → responsable: CS → requiere revisión RGPD" },
+          { text: "Rellena Calidad de Datos: para cada fuente, estima: ¿es estructurada o no estructurada? ¿Está completa? ¿Está actualizada? Puntúa del 1 al 5." },
+          { text: "Rellena Volumen de Datos: ¿cuántos registros existen? ¿Cuántos se añadirán mensualmente? Esto afecta el coste de infraestructura." },
+          { text: "Rellena Cumplimiento: ¿los datos contienen PII? ¿Están cubiertos por el RGPD u otras regulaciones? ¿Quién necesita aprobarlos?" },
+          { text: "Añade una 'puntuación de preparación de datos' (1–10) y una lista de bloqueos a resolver antes de comenzar el proyecto." }
+        ],
+        deliverable: "Un documento de requisitos de datos con puntuación de preparación y lista de bloqueos — listo para compartir con tu equipo de ingeniería."
+      },
+      {
+        tag: "Bloque 4", title: "RAG & Multimodalidad", desc: "Aprende el RAG (Retrieval-Augmented Generation) — la técnica que permite a la IA responder preguntas usando los documentos de tu organización. Explora también la IA multimodal con texto, imágenes y audio.",
+        pmNote: "RAG es la técnica de IA más práctica para la mayoría de los casos de uso empresarial. Si tu empresa tiene documentos, políticas o bases de conocimiento, RAG es cómo haces que la IA los 'conozca' sin reentrenamiento. Esto tiene implicaciones importantes para el alcance, el coste y el plazo.",
+        topics: ["Qué es RAG", "Búsqueda vectorial", "Chunking de documentos", "pgvector / Pinecone", "Reranking", "Inputs multimodales"],
+        exTitle: "Ejercicio: Define un caso de uso RAG y presupuestalo como proyecto", exMeta: "90 min",
+        steps: [
+          { text: "Identifica una base de conocimiento en tu organización: una wiki interna, una biblioteca de políticas, un manual de producto o preguntas frecuentes." },
+          { text: "Escribe un párrafo con el enunciado del problema: 'Los empleados actualmente tienen dificultades para encontrar X porque Y. Un asistente de IA que responda preguntas usando nuestros documentos Z ahorraría W horas a la semana.'" },
+          { text: "Lista los documentos que entrarán en el sistema RAG. Para cada uno: formato (PDF, Word, web), estimación de páginas, frecuencia de actualización y responsable." },
+          { text: "Define la experiencia de usuario: ¿cómo interactuarán los empleados con la IA? Escribe 3 preguntas de ejemplo.", code: "Preguntas de ejemplo:\n1. '¿Cuál es nuestra política de reembolso de gastos en teletrabajo?'\n2. '¿Cómo solicito una licencia de software?'\n3. '¿Cuál es el SLA para incidentes P1?'" },
+          { text: "Crea un cronograma básico con estos hitos: Recogida de datos, Limpieza, Prototipo RAG, Pruebas con usuarios, Despliegue en producción. Estima la duración de cada uno." },
+          { text: "Identifica 3 riesgos específicos del RAG: datos desactualizados, alucinación e incremento de alcance. Escribe una mitigación para cada uno." }
+        ],
+        deliverable: "Un briefing de proyecto RAG: problema, documentos, historias de usuario, cronograma y registro de riesgos."
+      },
+      {
+        tag: "Bloque 5", title: "Fine-Tuning & MLOps", desc: "Entiende cuándo y por qué hacer fine-tuning de un modelo frente a usar RAG. Aprende MLOps — la práctica de operar sistemas de IA de forma fiable en producción.",
+        pmNote: "El fine-tuning es caro y lento. RAG es más barato y rápido. Como Product &amp; Project Manager, conocer los trade-offs te permite cuestionar la sobreingeniería y mantener los proyectos dentro del presupuesto. MLOps es tu framework de riesgo operacional — determina si tu IA seguirá siendo fiable tras el lanzamiento.",
+        topics: ["Fine-tuning vs RAG", "LoRA y QLoRA", "MLflow para seguimiento", "Pipelines con ZenML", "Versionado de modelos", "Gestión de experimentos"],
+        exTitle: "Ejercicio: Crea un framework de decisión fine-tuning vs RAG", exMeta: "60 min",
+        steps: [
+          { text: "Abre una hoja de cálculo. Crearás una matriz de decisión para ayudar a tu equipo a elegir entre RAG y fine-tuning." },
+          { text: "Crea estas columnas: Caso de uso, Datos disponibles, Frecuencia de actualización, Necesidad de latencia, Presupuesto, Enfoque recomendado." },
+          { text: "Aprende los criterios de cada enfoque:", code: "Fine-Tuning es mejor cuando:\n- Se necesita un estilo/tono específico\n- Vocabulario de dominio muy especializado\n- El presupuesto permite > €5.000 para entrenamiento\n\nRAG es mejor cuando:\n- El conocimiento cambia frecuentemente\n- Los documentos ya existen\n- El presupuesto es limitado\n- Se necesita citar fuentes" },
+          { text: "Añade 5 casos de uso hipotéticos de tu sector. Para cada uno, evalúa cada criterio y marca RAG o Fine-tune." },
+          { text: "Calcula una puntuación simple: 1 punto por criterio cumplido. El enfoque con más puntos gana." },
+          { text: "Añade una columna para 'requisitos de MLOps': ¿qué monitorización necesitará este sistema tras el lanzamiento? ¿Quién es el responsable?" }
+        ],
+        deliverable: "Una matriz de decisión reutilizable: RAG vs fine-tuning para 5 casos de uso, con responsabilidades de MLOps definidas."
+      },
+      {
+        tag: "Bloque 6", title: "Cloud & Producción", desc: "Aprende cómo se despliegan los sistemas de IA en infraestructura cloud (AWS, GCP, Azure), cómo funcionan los pipelines de CI/CD para IA y cómo monitorizar sistemas en producción.",
+        pmNote: "El despliegue en producción es donde la mayoría de los proyectos de IA triunfan o mueren en silencio. Como Product &amp; Project Manager, eres dueño del plan de go-live, la estrategia de rollback y las métricas de éxito. Este bloque te da el vocabulario para definir todo esto claramente con tu equipo de DevOps.",
+        topics: ["Básico de AWS / GCP / Azure", "Contenedores Docker", "CI/CD para IA", "Despliegue de APIs", "Monitorización y alertas", "Optimización de costes"],
+        exTitle: "Ejercicio: Redacta un checklist de preparación para producción", exMeta: "75 min",
+        steps: [
+          { text: "Un 'checklist de preparación para producción' es la barrera entre 'funciona en mi máquina' y 'está en vivo para usuarios reales'. Crea uno para tu proyecto de IA." },
+          { text: "Sección 1 — Infraestructura:", code: "[ ] Proveedor de cloud seleccionado (AWS / GCP / Azure)\n[ ] Entornos definidos (dev / staging / producción)\n[ ] Recursos de cómputo dimensionados\n[ ] Almacenamiento provisionado para modelo y datos\n[ ] Seguridad de red revisada" },
+          { text: "Sección 2 — Fiabilidad:", code: "[ ] Auto-scaling configurado\n[ ] Plan de failover documentado\n[ ] Procedimiento de rollback probado\n[ ] SLA definido (ej.: 99,9% de uptime)" },
+          { text: "Sección 3 — Monitorización:", code: "[ ] Latencia de respuesta rastreada\n[ ] Tasa de errores rastreada\n[ ] Calidad del output de IA rastreada\n[ ] Coste rastreado (alerta si supera el presupuesto)" },
+          { text: "Sección 4 — Plan de lanzamiento: Define soft launch (interno) → limitado (10% de usuarios) → lanzamiento completo. Establece criterios para cada fase." },
+          { text: "Revisa el checklist con tu tech lead. Asigna un responsable y fecha límite a cada elemento sin completar." }
+        ],
+        deliverable: "Un checklist de preparación para producción con responsables y plazos — tu barrera de go-live para IA."
+      },
+      {
+        tag: "Bloque 7", title: "Evaluación & Proyecto Final", desc: "Aprende a evaluar la calidad de los sistemas de IA de forma sistemática. Completa tu proyecto final: un sistema de IA completo con observabilidad, una API y despliegue en AWS.",
+        pmNote: "La evaluación es la parte más difícil de los proyectos de IA — a diferencia del software tradicional, '¿funciona?' no tiene respuesta binaria. Este bloque te enseña a definir, medir y reportar la calidad de la IA de forma significativa tanto para equipos técnicos como para stakeholders de negocio.",
+        topics: ["Métricas de evaluación de LLMs", "Framework RAGAS", "A/B testing en IA", "Observabilidad", "Revisión del proyecto final", "Presentación del portafolio"],
+        exTitle: "Ejercicio: Define un framework de evaluación de IA para stakeholders", exMeta: "90 min",
+        steps: [
+          { text: "Crea un template de 'Informe de Rendimiento de IA' — el documento que compartirás con la dirección cada mes para informar sobre el estado del sistema." },
+          { text: "Sección 1 — Métricas de negocio (lo que importa a los stakeholders):", code: "- Tiempo ahorrado por semana (horas)\n- Coste por consulta (€)\n- Puntuación de satisfacción del usuario (1–5)\n- Tareas automatizadas vs línea base manual\n- Tasa de errores reportada por usuarios" },
+          { text: "Sección 2 — Métricas técnicas de calidad (traducidas para no técnicos):", code: "- Relevancia: '¿Las respuestas son pertinentes?' (objetivo > 0,8)\n- Fidelidad: '¿La IA se inventa cosas?' (objetivo > 0,9)\n- Latencia: '¿Qué tan rápido responde?' (objetivo < 3 seg)\n- Uptime: '¿Estuvo disponible?' (objetivo > 99,5%)" },
+          { text: "Sección 3 — Tabla de tendencia mensual: crea columnas para Mes, Relevancia, Fidelidad, Latencia, Uptime, Coste, Puntuación usuario. Rellena 3 meses hipotéticos para probar el formato." },
+          { text: "Sección 4 — Acciones: para cualquier métrica por debajo del objetivo, indica: el problema, hipótesis de causa raíz, acción tomada y fecha esperada de recuperación." },
+          { text: "Entrega tus tres proyectos de portafolio: el diagrama de flujo de IA (Bloque 2), el briefing del proyecto RAG (Bloque 4) y este framework de evaluación." }
+        ],
+        deliverable: "Un template de Informe de Rendimiento de IA — tu herramienta de gobernanza continua para IA en producción."
+      }
+    ]
+  }
+};
+
+let lang = 'en';
+let currentBlock = 0;
+const completed = new Set();
+
+function setLang(l) {
+  lang = l;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent.trim().startsWith(l === 'en' ? 'En' : l === 'pt' ? 'Po' : 'Es')));
+  applyStaticTranslations();
+  renderNav();
+  renderBlock(currentBlock);
+  updateProgress();
+  renderHeroBlocks();
+}
+
+function applyStaticTranslations() {
+  const d = T[lang];
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const key = el.getAttribute('data-t');
+    if (key === 'heroTitle') return;
+    if (d[key]) el.textContent = d[key];
+  });
+}
+
+function updateProgress() {
+  const d = T[lang];
+  const pct = Math.round((completed.size / 7) * 100);
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-count').textContent = completed.size + ' / 7';
+}
+
+function renderNav() {
+  const nav = document.getElementById('block-nav');
+  nav.innerHTML = '';
+  T[lang].blocks.forEach((b, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'bnav-btn' + (i === currentBlock ? ' active' : '') + (completed.has(i) ? ' done' : '');
+    btn.textContent = (lang === 'es' ? 'Bloque' : lang === 'pt' ? 'Bloco' : 'Block') + ' ' + (i+1);
+    btn.onclick = () => { currentBlock = i; renderNav(); renderBlock(i); };
+    nav.appendChild(btn);
+  });
+}
+
+function renderBlock(idx) {
+  const d = T[lang];
+  const b = d.blocks[idx];
+  const isDone = completed.has(idx);
+  const chips = b.topics.map((t, ti) => {
+    const safe = t.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    return `<span class="chip" onclick="toggleTopic(this, '${safe}', ${idx})" data-ti="${ti}">${t}</span>`;
+  }).join('');
+  const steps = b.steps.map((s, i) => {
+    const code = s.code ? `<span class="step-code">${s.code}</span>` : '';
+    return `<div class="step"><div class="step-num">${i+1}</div><div class="step-body">${s.text}${code}</div></div>`;
+  }).join('');
+
+  const prevBtn = idx > 0 ? `<button class="btn btn-outline" onclick="goTo(${idx-1})">${d.prevBtn}</button>` : '';
+  const nextBtn = idx < 6 ? `<button class="btn btn-primary" onclick="goTo(${idx+1})">${d.nextBtn}</button>` : '';
+
+  document.getElementById('block-content').innerHTML = `
+    <div class="block-card">
+      <div class="block-header">
+        <div class="block-tag">${b.tag}</div>
+        <div class="block-title">${b.title}</div>
+        <div class="block-desc">${b.desc}</div>
+      </div>
+      <div class="block-body">
+        <div class="pm-note"><strong>${d.pmLabel}:</strong> ${b.pmNote}</div>
+        <div class="topics-wrap">
+          <div class="topics-label">${d.topicsLabel}</div>
+          <div class="chips-wrap">${chips}</div>
+          <div class="topic-panel" id="topic-panel-${idx}"></div>
+        </div>
+        <div class="exercise">
+          <div class="ex-header">
+            <div>
+              <div class="ex-title">${b.exTitle}</div>
+              <div class="ex-meta">${b.exMeta}</div>
+            </div>
+            <div class="ex-badge">${d.noCode}</div>
+          </div>
+          <div class="ex-steps">${steps}</div>
+          <div class="deliverable"><strong>${d.deliverableLabel}:</strong> ${b.deliverable}</div>
+          <div class="ex-footer">
+            <label class="check-label">
+              <input type="checkbox" ${isDone ? 'checked' : ''} onchange="toggleDone(${idx}, this.checked)">
+              ${d.checkLabel}
+            </label>
+          </div>
+        </div>
+        <div class="nav-btns">${prevBtn}${nextBtn}</div>
+      </div>
+    </div>
+  `;
+}
+
+function goTo(idx) {
+  currentBlock = idx;
+  renderNav();
+  renderBlock(idx);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleDone(idx, checked) {
+  if (checked) completed.add(idx); else completed.delete(idx);
+  updateProgress();
+  renderNav();
+}
+
+
+function renderHeroBlocks() {
+  const grid = document.getElementById('hero-blocks-list');
+  if (!grid) return;
+  const blocks = T[lang].blocks;
+  grid.innerHTML = blocks.map((b, i) =>
+    '<div class="hero-block-item"><span class="hero-block-num">0' + (i+1) + '</span><span>' + b.title + '</span></div>'
+  ).join('');
+}
+
+
+const TOPIC_INFO = {
+  // ─── English Block 1 ───
+  "What is an LLM": {
+    desc: "Large Language Models (LLMs) are AI systems trained on massive text datasets. They predict the next word based on context, enabling human-like conversation, text generation, summarization, and reasoning tasks.",
+    gemini: "https://gemini.google.com/app?q=What+is+a+Large+Language+Model+explained+simply",
+    yt: "https://www.youtube.com/results?search_query=what+is+LLM+explained"
+  },
+  "Tokens & context windows": {
+    desc: "Tokens are the basic units LLMs process — roughly 3/4 of a word. A context window is the maximum amount of text an LLM can 'see' at once. Longer context windows cost more but allow processing more information.",
+    gemini: "https://gemini.google.com/app?q=What+are+tokens+and+context+windows+in+LLMs",
+    yt: "https://www.youtube.com/results?search_query=LLM+tokens+context+window+explained"
+  },
+  "APIs and endpoints": {
+    desc: "An API (Application Programming Interface) lets software communicate with other software. An endpoint is a specific URL you call to trigger a function — like sending text to an LLM and receiving a response.",
+    gemini: "https://gemini.google.com/app?q=What+is+an+API+and+endpoint+for+beginners",
+    yt: "https://www.youtube.com/results?search_query=what+is+API+endpoint+explained"
+  },
+  "Prompt engineering basics": {
+    desc: "Prompt engineering is crafting instructions for LLMs to get desired outputs. Techniques include role assignment, providing examples, step-by-step reasoning, and format constraints.",
+    gemini: "https://gemini.google.com/app?q=Prompt+engineering+basics+for+beginners",
+    yt: "https://www.youtube.com/results?search_query=prompt+engineering+tutorial"
+  },
+  "AI vs ML vs Data Science": {
+    desc: "Data Science extracts insights from data. Machine Learning trains models to make predictions. AI is the broader field of intelligent systems. LLMs sit within AI and ML but have unique engineering requirements.",
+    gemini: "https://gemini.google.com/app?q=Difference+between+AI+ML+Data+Science",
+    yt: "https://www.youtube.com/results?search_query=AI+vs+ML+vs+data+science"
+  },
+  "Cost & latency trade-offs": {
+    desc: "Every LLM call costs money (per token) and takes time (latency). Larger models are smarter but slower and more expensive. Product & Project Managers must balance quality with operational cost and user experience.",
+    gemini: "https://gemini.google.com/app?q=LLM+cost+and+latency+trade-offs",
+    yt: "https://www.youtube.com/results?search_query=LLM+cost+latency+tradeoffs"
+  },
+
+  // ─── English Block 2 ───
+  "LangChain basics": {
+    desc: "LangChain is an open-source framework for building LLM applications. It provides tools for chaining prompts, connecting data sources, and managing conversation memory.",
+    gemini: "https://gemini.google.com/app?q=What+is+LangChain+explained+simply",
+    yt: "https://www.youtube.com/results?search_query=LangChain+tutorial+beginners"
+  },
+  "LangGraph for workflows": {
+    desc: "LangGraph extends LangChain with graph-based workflow orchestration. Model AI processes as nodes and edges — ideal for multi-step systems where AI decides what to do next.",
+    gemini: "https://gemini.google.com/app?q=What+is+LangGraph+AI+workflows",
+    yt: "https://www.youtube.com/results?search_query=LangGraph+tutorial"
+  },
+  "Agents and chains": {
+    desc: "A chain is a fixed sequence of LLM calls. An agent autonomously decides which tools to use and in what order. Agents are flexible but harder to control.",
+    gemini: "https://gemini.google.com/app?q=AI+agents+vs+chains+LangChain",
+    yt: "https://www.youtube.com/results?search_query=AI+agents+vs+chains"
+  },
+  "State machines": {
+    desc: "State machines define a system's possible states and transitions. In AI workflows, they ensure the system knows where it is in a process and what actions are valid next.",
+    gemini: "https://gemini.google.com/app?q=What+is+state+machine+in+AI",
+    yt: "https://www.youtube.com/results?search_query=state+machine+explained"
+  },
+  "Tool calling": {
+    desc: "Tool calling (function calling) lets LLMs trigger external functions — search, query databases, send emails — based on user needs. It's how AI moves from conversation to action.",
+    gemini: "https://gemini.google.com/app?q=What+is+LLM+tool+calling",
+    yt: "https://www.youtube.com/results?search_query=LLM+function+calling+explained"
+  },
+  "Orchestration patterns": {
+    desc: "Orchestration coordinates multiple AI components — sequentially, in parallel, or conditionally. Patterns like map-reduce, routing, and fan-out structure complex AI systems.",
+    gemini: "https://gemini.google.com/app?q=AI+orchestration+patterns",
+    yt: "https://www.youtube.com/results?search_query=AI+orchestration+patterns"
+  },
+
+  // ─── English Block 3 ───
+  "Model selection criteria": {
+    desc: "Choosing models involves trade-offs: capability vs cost, speed vs accuracy, open-source vs proprietary. Key factors: task type, data sensitivity, latency requirements, budget.",
+    gemini: "https://gemini.google.com/app?q=How+to+choose+AI+model",
+    yt: "https://www.youtube.com/results?search_query=AI+model+selection+guide"
+  },
+  "Open vs closed models": {
+    desc: "Closed models (GPT-4, Claude) accessed via API — easy but you pay per call. Open models (Llama, Mistral) run on your infrastructure — more control, more complexity.",
+    gemini: "https://gemini.google.com/app?q=Open+vs+closed+AI+models",
+    yt: "https://www.youtube.com/results?search_query=open+vs+closed+LLM"
+  },
+  "Data pipelines": {
+    desc: "Data pipelines automate flow from raw sources to cleaned, structured data ready for AI. Includes extraction, transformation, validation, loading (ETL). Broken pipelines = broken AI.",
+    gemini: "https://gemini.google.com/app?q=What+is+data+pipeline",
+    yt: "https://www.youtube.com/results?search_query=data+pipeline+explained"
+  },
+  "Data quality metrics": {
+    desc: "Measured by: completeness (no missing fields), accuracy (correct values), consistency (same format), timeliness (up to date), uniqueness (no duplicates). Poor quality is #1 cause of AI failure.",
+    gemini: "https://gemini.google.com/app?q=Data+quality+metrics+AI",
+    yt: "https://www.youtube.com/results?search_query=data+quality+metrics"
+  },
+  "Embeddings": {
+    desc: "Numerical representations of text in high-dimensional space. Similar concepts end up close together. Power semantic search — finding documents by meaning, not just keywords.",
+    gemini: "https://gemini.google.com/app?q=What+are+embeddings+in+AI",
+    yt: "https://www.youtube.com/results?search_query=embeddings+AI+explained"
+  },
+  "Vector databases intro": {
+    desc: "Store embeddings and enable fast similarity search. Instead of exact matches, find the most semantically similar documents. Essential for RAG systems.",
+    gemini: "https://gemini.google.com/app?q=What+is+vector+database",
+    yt: "https://www.youtube.com/results?search_query=vector+database+explained"
+  },
+
+  // ─── English Block 4 ───
+  "What is RAG": {
+    desc: "Retrieval-Augmented Generation combines document retrieval with LLM generation. AI answers only from retrieved context, reducing hallucination and enabling use of private data.",
+    gemini: "https://gemini.google.com/app?q=What+is+RAG+explained",
+    yt: "https://www.youtube.com/results?search_query=RAG+explained"
+  },
+  "Vector search": {
+    desc: "Finds semantically similar documents by comparing embedding vectors using distance metrics (cosine similarity). How RAG finds the right documents to give the LLM.",
+    gemini: "https://gemini.google.com/app?q=What+is+vector+search",
+    yt: "https://www.youtube.com/results?search_query=vector+search+explained"
+  },
+  "Document chunking": {
+    desc: "Splits large documents into smaller pieces before embedding. Chunk size affects retrieval — too large means imprecise, too small loses context. Key RAG design decision.",
+    gemini: "https://gemini.google.com/app?q=Document+chunking+RAG",
+    yt: "https://www.youtube.com/results?search_query=document+chunking+RAG"
+  },
+  "pgvector / Pinecone": {
+    desc: "pgvector adds vector storage to PostgreSQL. Pinecone is managed vector database service. Both store embeddings and run similarity search — core RAG infrastructure.",
+    gemini: "https://gemini.google.com/app?q=pgvector+vs+Pinecone",
+    yt: "https://www.youtube.com/results?search_query=pgvector+pinecone"
+  },
+  "Reranking": {
+    desc: "After vector search retrieves top candidates, a reranker re-scores them with a more powerful model for true relevance. This 'second pass' significantly improves RAG quality.",
+    gemini: "https://gemini.google.com/app?q=What+is+reranking+RAG",
+    yt: "https://www.youtube.com/results?search_query=reranking+RAG"
+  },
+  "Multimodal inputs": {
+    desc: "Process multiple data types — text, images, audio, video — in one model. GPT-4o and Gemini are multimodal. Enables 'describe this photo' or 'transcribe this meeting'.",
+    gemini: "https://gemini.google.com/app?q=What+is+multimodal+AI",
+    yt: "https://www.youtube.com/results?search_query=multimodal+AI+explained"
+  },
+
+  // ─── English Block 5 ───
+  "Fine-tuning vs RAG": {
+    desc: "Fine-tuning trains a model on your data — expensive, slow, knowledge bakes in. RAG keeps knowledge external and updatable. Most business cases should start with RAG.",
+    gemini: "https://gemini.google.com/app?q=Fine-tuning+vs+RAG",
+    yt: "https://www.youtube.com/results?search_query=fine+tuning+vs+RAG"
+  },
+  "LoRA and QLoRA": {
+    desc: "Efficient fine-tuning techniques reducing compute and memory needed to adapt large models. Make fine-tuning feasible without massive GPU clusters.",
+    gemini: "https://gemini.google.com/app?q=What+is+LoRA+QLoRA",
+    yt: "https://www.youtube.com/results?search_query=LoRA+QLoRA+explained"
+  },
+  "MLflow for tracking": {
+    desc: "Open-source platform tracking ML experiments — logging parameters, metrics, model versions to compare runs and reproduce results. Version control for AI experiments.",
+    gemini: "https://gemini.google.com/app?q=What+is+MLflow",
+    yt: "https://www.youtube.com/results?search_query=MLflow+tutorial"
+  },
+  "ZenML pipelines": {
+    desc: "Framework for reproducible ML pipelines. Abstracts infrastructure so you define data processing and training in Python and run anywhere — locally or cloud.",
+    gemini: "https://gemini.google.com/app?q=What+is+ZenML",
+    yt: "https://www.youtube.com/results?search_query=ZenML+tutorial"
+  },
+  "Model versioning": {
+    desc: "Tracks every model version — training data, parameters, performance. Enables rollback if new model underperforms in production.",
+    gemini: "https://gemini.google.com/app?q=Model+versioning+MLOps",
+    yt: "https://www.youtube.com/results?search_query=model+versioning+MLOps"
+  },
+  "Experiment management": {
+    desc: "Systematically running, logging, comparing AI experiments — changing one variable at a time to understand what drives performance improvement.",
+    gemini: "https://gemini.google.com/app?q=ML+experiment+management",
+    yt: "https://www.youtube.com/results?search_query=ML+experiment+management"
+  },
+
+  // ─── English Block 6 ───
+  "AWS / GCP / Azure basics": {
+    desc: "Three major cloud platforms. AWS (Amazon), GCP (Google), Azure (Microsoft) offer compute, storage, databases, managed AI services. Each has AI strengths — SageMaker, Vertex AI, Azure AI Studio.",
+    gemini: "https://gemini.google.com/app?q=AWS+vs+GCP+vs+Azure+AI",
+    yt: "https://www.youtube.com/results?search_query=AWS+GCP+Azure+comparison"
+  },
+  "Docker containers": {
+    desc: "Packages application and dependencies into portable 'container' running identically anywhere. For AI, ensures model, code, libraries behave same in dev and production.",
+    gemini: "https://gemini.google.com/app?q=What+is+Docker+container",
+    yt: "https://www.youtube.com/results?search_query=docker+containers+explained"
+  },
+  "CI/CD for AI": {
+    desc: "Continuous Integration/Deployment automates testing and deploying changes. For AI: automatically re-train, test, deploy new model versions when data or code changes.",
+    gemini: "https://gemini.google.com/app?q=CI+CD+for+AI",
+    yt: "https://www.youtube.com/results?search_query=CI+CD+machine+learning"
+  },
+  "API deployment": {
+    desc: "Wrapping AI in web service (FastAPI, Flask) so other applications can call it. Standard way to make AI available to products, websites, internal tools.",
+    gemini: "https://gemini.google.com/app?q=Deploy+AI+model+as+API",
+    yt: "https://www.youtube.com/results?search_query=deploy+AI+model+API"
+  },
+  "Monitoring & alerts": {
+    desc: "Production AI needs ongoing monitoring — tracking latency, errors, output quality. Alerts notify team when something degrades. Without monitoring, you won't know AI broke until users complain.",
+    gemini: "https://gemini.google.com/app?q=AI+model+monitoring+production",
+    yt: "https://www.youtube.com/results?search_query=AI+model+monitoring"
+  },
+  "Cost optimisation": {
+    desc: "Cloud AI costs spiral quickly. Optimizations: caching repeated queries, using smaller models for simple tasks, batching requests, right-sizing infrastructure.",
+    gemini: "https://gemini.google.com/app?q=AI+cloud+cost+optimization",
+    yt: "https://www.youtube.com/results?search_query=AI+cloud+cost+optimization"
+  },
+
+  // ─── English Block 7 ───
+  "LLM evaluation metrics": {
+    desc: "Beyond accuracy: BLEU (text similarity), ROUGE (recall), task-specific human scores. Production systems use automated metrics plus periodic human evaluation.",
+    gemini: "https://gemini.google.com/app?q=LLM+evaluation+metrics",
+    yt: "https://www.youtube.com/results?search_query=LLM+evaluation+metrics"
+  },
+  "RAGAS framework": {
+    desc: "Evaluation framework for RAG systems. Measures faithfulness (no hallucination), answer relevancy, context precision, context recall — four pillars of RAG quality.",
+    gemini: "https://gemini.google.com/app?q=What+is+RAGAS+framework",
+    yt: "https://www.youtube.com/results?search_query=RAGAS+framework+RAG"
+  },
+  "A/B testing AI": {
+    desc: "Running two model versions simultaneously, splitting traffic to compare which performs better on real users. Rigorous way to validate new model before full rollout.",
+    gemini: "https://gemini.google.com/app?q=A+B+testing+AI+models",
+    yt: "https://www.youtube.com/results?search_query=AB+testing+AI+models"
+  },
+  "Observability": {
+    desc: "Understanding what AI system does internally — tracing requests through pipeline, logging intermediate steps, debugging failures. Tools like LangSmith provide this.",
+    gemini: "https://gemini.google.com/app?q=AI+system+observability",
+    yt: "https://www.youtube.com/results?search_query=AI+observability+LLM"
+  },
+  "Final project review": {
+    desc: "Present deployed AI system to peers, walk through architecture decisions, demonstrate live system, reflect on what you'd do differently.",
+    gemini: "https://gemini.google.com/app?q=AI+engineering+project+portfolio",
+    yt: "https://www.youtube.com/results?search_query=AI+engineering+portfolio"
+  },
+  "Portfolio presentation": {
+    desc: "Portfolio demonstrates AI Engineering competence. Show three complete systems — problem to deployed solution — with architecture diagrams, code, evaluation results.",
+    gemini: "https://gemini.google.com/app?q=AI+engineer+portfolio+tips",
+    yt: "https://www.youtube.com/results?search_query=AI+engineer+portfolio"
+  }
+,
+  // ─── Portuguese Block 1 ───
+  "O que é um LLM": {
+    desc: "Large Language Models (LLMs) são sistemas de IA treinados em conjuntos massivos de dados de texto. Eles preveem a próxima palavra com base no contexto, permitindo conversação semelhante à humana, geração de texto, resumos e tarefas de raciocínio.",
+    gemini: "https://gemini.google.com/app?q=O+que+%C3%A9+um+Large+Language+Model+explicado+de+forma+simples",
+    yt: "https://www.youtube.com/results?search_query=o+que+%C3%A9+LLM+explicado"
+  },
+  "Tokens e janelas de contexto": {
+    desc: "Tokens são as unidades básicas que os LLMs processam — aproximadamente 3/4 de uma palavra. Uma janela de contexto é a quantidade máxima de texto que um LLM pode 'ver' de uma vez. Janelas de contexto mais longas custam mais, mas permitem processar mais informações.",
+    gemini: "https://gemini.google.com/app?q=O+que+s%C3%A3o+tokens+e+janelas+de+contexto+em+LLMs",
+    yt: "https://www.youtube.com/results?search_query=LLM+tokens+janela+de+contexto"
+  },
+  "APIs e endpoints": {
+    desc: "Uma API (Interface de Programação de Aplicações) permite que um software se comunique com outro software. Um endpoint é uma URL específica que você chama para acionar uma função — como enviar texto para um LLM e receber uma resposta.",
+    gemini: "https://gemini.google.com/app?q=O+que+%C3%A9+uma+API+e+endpoint+para+iniciantes",
+    yt: "https://www.youtube.com/results?search_query=o+que+%C3%A9+API+endpoint+explicado"
+  },
+  "Engenharia de prompts": {
+    desc: "Engenharia de prompts é a arte de criar instruções para LLMs para obter os resultados desejados. As técnicas incluem atribuição de papéis, fornecimento de exemplos, raciocínio passo a passo e restrições de formato.",
+    gemini: "https://gemini.google.com/app?q=Engenharia+de+prompts+b%C3%A1sico+para+iniciantes",
+    yt: "https://www.youtube.com/results?search_query=tutorial+engenharia+de+prompts"
+  },
+  "IA vs ML vs Data Science": {
+    desc: "Data Science extrai insights dos dados. Machine Learning treina modelos para fazer previsões. IA é o campo mais amplo de sistemas inteligentes. LLMs estão dentro de IA e ML, mas têm requisitos de engenharia únicos.",
+    gemini: "https://gemini.google.com/app?q=Diferen%C3%A7a+entre+IA+ML+Data+Science",
+    yt: "https://www.youtube.com/results?search_query=IA+vs+ML+vs+data+science"
+  },
+  "Trade-offs de custo e latência": {
+    desc: "Cada chamada de LLM custa dinheiro (por token) e leva tempo (latência). Modelos maiores são mais inteligentes, mas mais lentos e caros. Gerentes de Produto e Projeto devem equilibrar qualidade com custo operacional e experiência do usuário.",
+    gemini: "https://gemini.google.com/app?q=Trade-offs+de+custo+e+lat%C3%AAncia+LLM",
+    yt: "https://www.youtube.com/results?search_query=LLM+custo+latencia+tradeoffs"
+  },
+
+  // ─── Portuguese Block 2 ───
+  "Básico de LangChain": {
+    desc: "LangChain é uma estrutura de código aberto para construir aplicações com LLMs. Fornece ferramentas para encadear prompts, conectar fontes de dados e gerenciar memória de conversação.",
+    gemini: "https://gemini.google.com/app?q=O+que+%C3%A9+LangChain+explicado+de+forma+simples",
+    yt: "https://www.youtube.com/results?search_query=tutorial+LangChain+iniciantes"
+  },
+  "LangGraph para fluxos": {
+    desc: "LangGraph estende o LangChain com orquestração de fluxo de trabalho baseada em grafos. Modela processos de IA como nós e arestas — ideal para sistemas de múltiplas etapas onde a IA decide o que fazer a seguir.",
+    gemini: "https://gemini.google.com/app?q=O+que+%C3%A9+LangGraph+fluxos+de+trabalho+IA",
+    yt: "https://www.youtube.com/results?search_query=tutorial+LangGraph"
+  },
+  "Agentes e cadeias": {
+    desc: "Uma cadeia é uma sequência fixa de chamadas LLM. Um agente decide autonomamente quais ferramentas usar e em que ordem. Agentes são flexíveis, mas mais difíceis de controlar.",
+    gemini: "https://gemini.google.com/app?q=Agentes+de+IA+vs+cadeias+LangChain",
+    yt: "https://www.youtube.com/results?search_query=agentes+vs+cadeias+IA"
+  },
+  "Máquinas de estado": {
+    desc: "Máquinas de estado definem os estados possíveis de um sistema e as transições. Em fluxos de trabalho de IA, garantem que o sistema saiba onde está em um processo e quais ações são válidas a seguir.",
+    gemini: "https://gemini.google.com/app?q=O+que+%C3%A9+m%C3%A1quina+de+estado+em+IA",
+    yt: "https://www.youtube.com/results?search_query=m%C3%A1quina+de+estado+explicado"
+  },
+  "Tool calling": {
+    desc: "Tool calling (chamada de função) permite que LLMs acionem funções externas — pesquisar, consultar bancos de dados, enviar e-mails — com base nas necessidades do usuário. É como a IA passa da conversa para a ação.",
+    gemini: "https://gemini.google.com/app?q=O+que+%C3%A9+tool+calling+LLM",
+    yt: "https://www.youtube.com/results?search_query=LLM+function+calling+explicado"
+  },
+  "Padrões de orquestração": {
+    desc: "Orquestração coordena múltiplos componentes de IA — sequencialmente, em paralelo ou condicionalmente. Padrões como map-reduce, roteamento e fan-out estruturam sistemas de IA complexos.",
+    gemini: "https://gemini.google.com/app?q=Padr%C3%B5es+de+orquestra%C3%A7%C3%A3o+de+IA",
+    yt: "https://www.youtube.com/results?search_query=padr%C3%B5es+orquestra%C3%A7%C3%A3o+IA"
+  },
+
+  // ─── Portuguese Block 3 ───
+  "Critérios de seleção de modelos": {
+    desc: "Escolher modelos envolve trade-offs: capacidade vs custo, velocidade vs precisão, código aberto vs proprietário. Fatores-chave: tipo de tarefa, sensibilidade de dados, requisitos de latência, orçamento.",
+    gemini: "https://gemini.google.com/app?q=Como+escolher+modelo+de+IA",
+    yt: "https://www.youtube.com/results?search_query=guia+sele%C3%A7%C3%A3o+modelo+IA"
+  },
+  "Modelos abertos vs fechados": {
+    desc: "Modelos fechados (GPT-4, Claude) acessados via API — fáceis mas você paga por chamada. Modelos abertos (Llama, Mistral) rodam na sua infraestrutura — mais controle, mais complexidade.",
+    gemini: "https://gemini.google.com/app?q=Modelos+de+IA+abertos+vs+fechados",
+    yt: "https://www.youtube.com/results?search_query=modelos+abertos+vs+fechados+LLM"
+  },
+  "Pipelines de dados": {
+    desc: "Pipelines de dados automatizam o fluxo de fontes brutas para dados limpos e estruturados prontos para IA. Incluem extração, transformação, validação, carregamento (ETL). Pipelines quebrados = IA quebrada.",
+    gemini: "https://gemini.google.com/app?q=O+que+%C3%A9+pipeline+de+dados",
+    yt: "https://www.youtube.com/results?search_query=pipeline+de+dados+explicado"
+  },
+  "Métricas de qualidade de dados": {
+    desc: "Medido por: completude (sem campos faltantes), precisão (valores corretos), consistência (mesmo formato), pontualidade (atualizado), unicidade (sem duplicatas). Qualidade ruim é a causa #1 de falha de IA.",
+    gemini: "https://gemini.google.com/app?q=M%C3%A9tricas+de+qualidade+de+dados+IA",
+    yt: "https://www.youtube.com/results?search_query=m%C3%A9tricas+qualidade+dados"
+  },
+  "Embeddings": {
+    desc: "Representações numéricas de texto em espaço de alta dimensão. Conceitos similares ficam próximos. Potencializam busca semântica — encontrar documentos por significado, não apenas palavras-chave.",
+    gemini: "https://gemini.google.com/app?q=O+que+s%C3%A3o+embeddings+em+IA",
+    yt: "https://www.youtube.com/results?search_query=embeddings+IA+explicado"
+  },
+  "Bancos vetoriais": {
+    desc: "Armazenam embeddings e permitem busca rápida de similaridade. Em vez de correspondências exatas, encontram os documentos semanticamente mais similares. Essencial para sistemas RAG.",
+    gemini: "https://gemini.google.com/app?q=O+que+%C3%A9+banco+de+dados+vetorial",
+    yt: "https://www.youtube.com/results?search_query=banco+vetorial+explicado"
+  },
+
+  // ─── Portuguese Block 4 ───
+  "O que é RAG": {
+    desc: "Retrieval-Augmented Generation combina recuperação de documentos com geração de LLM. IA responde apenas do contexto recuperado, reduzindo alucinação e permitindo uso de dados privados.",
+    gemini: "https://gemini.google.com/app?q=O+que+%C3%A9+RAG+explicado",
+    yt: "https://www.youtube.com/results?search_query=RAG+explicado"
+  },
+  "Busca vetorial": {
+    desc: "Encontra documentos semanticamente similares comparando vetores de embedding usando métricas de distância (similaridade de cosseno). Como o RAG encontra os documentos certos para dar ao LLM.",
+    gemini: "https://gemini.google.com/app?q=O+que+%C3%A9+busca+vetorial",
+    yt: "https://www.youtube.com/results?search_query=busca+vetorial+explicado"
+  },
+  "Chunking de documentos": {
+    desc: "Divide documentos grandes em pedaços menores antes de incorporá-los. O tamanho do chunk afeta a recuperação — muito grande significa impreciso, muito pequeno perde contexto. Decisão chave de design RAG.",
+    gemini: "https://gemini.google.com/app?q=Chunking+de+documentos+RAG",
+    yt: "https://www.youtube.com/results?search_query=document+chunking+RAG"
+  },
+  "pgvector / Pinecone": {
+    desc: "pgvector adiciona armazenamento vetorial ao PostgreSQL. Pinecone é serviço gerenciado de banco vetorial. Ambos armazenam embeddings e executam busca de similaridade — infraestrutura central RAG.",
+    gemini: "https://gemini.google.com/app?q=pgvector+vs+Pinecone",
+    yt: "https://www.youtube.com/results?search_query=pgvector+pinecone"
+  },
+  "Reranking": {
+    desc: "Após a busca vetorial recuperar os principais candidatos, um reranker os pontua novamente com um modelo mais poderoso para relevância verdadeira. Esta 'segunda passagem' melhora significativamente a qualidade RAG.",
+    gemini: "https://gemini.google.com/app?q=O+que+%C3%A9+reranking+RAG",
+    yt: "https://www.youtube.com/results?search_query=reranking+RAG"
+  },
+  "Entradas multimodais": {
+    desc: "Processa múltiplos tipos de dados — texto, imagens, áudio, vídeo — em um modelo. GPT-4o e Gemini são multimodais. Permite 'descrever esta foto' ou 'transcrever esta reunião'.",
+    gemini: "https://gemini.google.com/app?q=O+que+%C3%A9+IA+multimodal",
+    yt: "https://www.youtube.com/results?search_query=IA+multimodal+explicado"
+  },
+
+  // ─── Portuguese Block 5 ───
+  "Fine-tuning vs RAG": {
+    desc: "Fine-tuning treina um modelo com seus dados — caro, lento, conhecimento fica permanente. RAG mantém conhecimento externo e atualizável. A maioria dos casos de negócio deve começar com RAG.",
+    gemini: "https://gemini.google.com/app?q=Fine-tuning+vs+RAG",
+    yt: "https://www.youtube.com/results?search_query=fine+tuning+vs+RAG"
+  },
+  "LoRA e QLoRA": {
+    desc: "Técnicas eficientes de fine-tuning reduzindo computação e memória necessárias para adaptar modelos grandes. Tornam o fine-tuning viável sem clusters massivos de GPU.",
+    gemini: "https://gemini.google.com/app?q=O+que+%C3%A9+LoRA+QLoRA",
+    yt: "https://www.youtube.com/results?search_query=LoRA+QLoRA+explicado"
+  },
+  "MLflow para rastreamento": {
+    desc: "Plataforma de código aberto rastreando experimentos de ML — registrando parâmetros, métricas, versões de modelo para comparar execuções e reproduzir resultados. Controle de versão para experimentos de IA.",
+    gemini: "https://gemini.google.com/app?q=O+que+%C3%A9+MLflow",
+    yt: "https://www.youtube.com/results?search_query=tutorial+MLflow"
+  },
+  "Pipelines com ZenML": {
+    desc: "Framework para pipelines de ML reproduzíveis. Abstrai preocupações de infraestrutura para que você defina processamento de dados e treinamento em Python e execute em qualquer lugar — localmente ou na nuvem.",
+    gemini: "https://gemini.google.com/app?q=O+que+%C3%A9+ZenML",
+    yt: "https://www.youtube.com/results?search_query=tutorial+ZenML"
+  },
+  "Versionamento de modelos": {
+    desc: "Rastreia cada versão do modelo — dados de treinamento, parâmetros, desempenho. Permite rollback se novo modelo tiver desempenho inferior em produção.",
+    gemini: "https://gemini.google.com/app?q=Versionamento+de+modelos+MLOps",
+    yt: "https://www.youtube.com/results?search_query=versionamento+modelos+MLOps"
+  },
+  "Gestão de experimentos": {
+    desc: "Executar, registrar e comparar experimentos de IA sistematicamente — mudando uma variável por vez para entender o que impulsiona melhoria de desempenho.",
+    gemini: "https://gemini.google.com/app?q=Gest%C3%A3o+de+experimentos+ML",
+    yt: "https://www.youtube.com/results?search_query=gest%C3%A3o+experimentos+ML"
+  },
+
+  // ─── Portuguese Block 6 ───
+  "Básico de AWS / GCP / Azure": {
+    desc: "Três principais plataformas de nuvem. AWS (Amazon), GCP (Google), Azure (Microsoft) oferecem computação, armazenamento, bancos de dados, serviços gerenciados de IA. Cada um tem pontos fortes em IA — SageMaker, Vertex AI, Azure AI Studio.",
+    gemini: "https://gemini.google.com/app?q=AWS+vs+GCP+vs+Azure+IA",
+    yt: "https://www.youtube.com/results?search_query=compara%C3%A7%C3%A3o+AWS+GCP+Azure"
+  },
+  "Containers Docker": {
+    desc: "Empacota aplicação e dependências em 'container' portátil que executa identicamente em qualquer lugar. Para IA, garante que modelo, código, bibliotecas se comportem igual em desenvolvimento e produção.",
+    gemini: "https://gemini.google.com/app?q=O+que+%C3%A9+container+Docker",
+    yt: "https://www.youtube.com/results?search_query=containers+docker+explicado"
+  },
+  "CI/CD para IA": {
+    desc: "Integração/Implantação Contínua automatiza teste e implantação de mudanças. Para IA: automaticamente re-treinar, testar, implantar novas versões do modelo quando dados ou código mudam.",
+    gemini: "https://gemini.google.com/app?q=CI+CD+para+IA",
+    yt: "https://www.youtube.com/results?search_query=CI+CD+machine+learning"
+  },
+  "Deploy de APIs": {
+    desc: "Envolver IA em serviço web (FastAPI, Flask) para que outras aplicações possam chamá-la. Forma padrão de disponibilizar IA para produtos, sites, ferramentas internas.",
+    gemini: "https://gemini.google.com/app?q=Deploy+modelo+IA+como+API",
+    yt: "https://www.youtube.com/results?search_query=deploy+modelo+IA+API"
+  },
+  "Monitoramento & alertas": {
+    desc: "IA em produção precisa de monitoramento contínuo — rastreando latência, erros, qualidade de saída. Alertas notificam equipe quando algo se degrada. Sem monitoramento, você não saberá que a IA quebrou até usuários reclamarem.",
+    gemini: "https://gemini.google.com/app?q=Monitoramento+modelo+IA+produ%C3%A7%C3%A3o",
+    yt: "https://www.youtube.com/results?search_query=monitoramento+modelo+IA"
+  },
+  "Otimização de custos": {
+    desc: "Custos de IA em nuvem podem crescer rapidamente. Otimizações: cache de consultas repetidas, uso de modelos menores para tarefas simples, agrupamento de solicitações, dimensionamento correto de infraestrutura.",
+    gemini: "https://gemini.google.com/app?q=Otimiza%C3%A7%C3%A3o+de+custos+IA+nuvem",
+    yt: "https://www.youtube.com/results?search_query=otimiza%C3%A7%C3%A3o+custos+IA"
+  },
+
+  // ─── Portuguese Block 7 ───
+  "Métricas de avaliação de LLMs": {
+    desc: "Além da precisão: BLEU (similaridade de texto), ROUGE (recall), pontuações humanas específicas da tarefa. Sistemas de produção usam métricas automatizadas mais avaliação humana periódica.",
+    gemini: "https://gemini.google.com/app?q=M%C3%A9tricas+de+avalia%C3%A7%C3%A3o+LLM",
+    yt: "https://www.youtube.com/results?search_query=m%C3%A9tricas+avalia%C3%A7%C3%A3o+LLM"
+  },
+  "Framework RAGAS": {
+    desc: "Framework de avaliação para sistemas RAG. Mede fidelidade (sem alucinação), relevância da resposta, precisão do contexto, recall do contexto — quatro pilares da qualidade RAG.",
+    gemini: "https://gemini.google.com/app?q=O+que+%C3%A9+framework+RAGAS",
+    yt: "https://www.youtube.com/results?search_query=framework+RAGAS+RAG"
+  },
+  "Teste A/B em IA": {
+    desc: "Executar duas versões de modelo simultaneamente, dividindo tráfego para comparar qual performa melhor com usuários reais. Forma rigorosa de validar novo modelo antes do lançamento completo.",
+    gemini: "https://gemini.google.com/app?q=Teste+A+B+modelos+de+IA",
+    yt: "https://www.youtube.com/results?search_query=teste+AB+modelos+IA"
+  },
+  "Observabilidade": {
+    desc: "Entender o que o sistema de IA faz internamente — rastrear solicitações através do pipeline, registrar etapas intermediárias, depurar falhas. Ferramentas como LangSmith fornecem isso.",
+    gemini: "https://gemini.google.com/app?q=Observabilidade+de+sistema+IA",
+    yt: "https://www.youtube.com/results?search_query=observabilidade+IA+LLM"
+  },
+  "Revisão do projeto final": {
+    desc: "Apresentar sistema de IA implantado para colegas, percorrer decisões de arquitetura, demonstrar sistema ao vivo, refletir sobre o que faria diferente.",
+    gemini: "https://gemini.google.com/app?q=Portf%C3%B3lio+projeto+engenharia+IA",
+    yt: "https://www.youtube.com/results?search_query=portf%C3%B3lio+engenharia+IA"
+  },
+  "Apresentação do portfólio": {
+    desc: "Portfólio demonstra competência em Engenharia de IA. Mostre três sistemas completos — problema até solução implantada — com diagramas de arquitetura, código, resultados de avaliação.",
+    gemini: "https://gemini.google.com/app?q=Dicas+portf%C3%B3lio+engenheiro+IA",
+    yt: "https://www.youtube.com/results?search_query=portf%C3%B3lio+engenheiro+IA"
+  },
+
+  // ─── Spanish Block 1 ───
+  "Qué es un LLM": {
+    desc: "Los Large Language Models (LLMs) son sistemas de IA entrenados en conjuntos masivos de datos de texto. Predicen la siguiente palabra según el contexto, permitiendo conversación similar a la humana, generación de texto, resúmenes y tareas de razonamiento.",
+    gemini: "https://gemini.google.com/app?q=Qu%C3%A9+es+un+Large+Language+Model+explicado+de+forma+simple",
+    yt: "https://www.youtube.com/results?search_query=qu%C3%A9+es+LLM+explicado"
+  },
+  "Tokens y ventanas de contexto": {
+    desc: "Los tokens son las unidades básicas que procesan los LLMs — aproximadamente 3/4 de una palabra. Una ventana de contexto es la cantidad máxima de texto que un LLM puede 'ver' a la vez. Ventanas más largas cuestan más pero permiten procesar más información.",
+    gemini: "https://gemini.google.com/app?q=Qu%C3%A9+son+tokens+y+ventanas+de+contexto+en+LLMs",
+    yt: "https://www.youtube.com/results?search_query=LLM+tokens+ventana+contexto"
+  },
+  "APIs y endpoints": {
+    desc: "Una API (Interfaz de Programación de Aplicaciones) permite que un software se comunique con otro software. Un endpoint es una URL específica que llamas para activar una función — como enviar texto a un LLM y recibir una respuesta.",
+    gemini: "https://gemini.google.com/app?q=Qu%C3%A9+es+una+API+y+endpoint+para+principiantes",
+    yt: "https://www.youtube.com/results?search_query=qu%C3%A9+es+API+endpoint+explicado"
+  },
+  "Ingeniería de prompts": {
+    desc: "La ingeniería de prompts es el arte de crear instrucciones para LLMs para obtener los resultados deseados. Las técnicas incluyen asignación de roles, proporcionar ejemplos, razonamiento paso a paso y restricciones de formato.",
+    gemini: "https://gemini.google.com/app?q=Ingenier%C3%ADa+de+prompts+b%C3%A1sica+para+principiantes",
+    yt: "https://www.youtube.com/results?search_query=tutorial+ingenier%C3%ADa+prompts"
+  },
+  "IA vs ML vs Data Science": {
+    desc: "Data Science extrae insights de los datos. Machine Learning entrena modelos para hacer predicciones. IA es el campo más amplio de sistemas inteligentes. Los LLMs están dentro de IA y ML, pero tienen requisitos de ingeniería únicos.",
+    gemini: "https://gemini.google.com/app?q=Diferencia+entre+IA+ML+Data+Science",
+    yt: "https://www.youtube.com/results?search_query=IA+vs+ML+vs+data+science"
+  },
+  "Trade-offs de coste y latencia": {
+    desc: "Cada llamada a LLM cuesta dinero (por token) y toma tiempo (latencia). Los modelos más grandes son más inteligentes pero más lentos y caros. Los Product & Project Managers deben equilibrar calidad con coste operacional y experiencia del usuario.",
+    gemini: "https://gemini.google.com/app?q=Trade-offs+de+coste+y+latencia+LLM",
+    yt: "https://www.youtube.com/results?search_query=LLM+coste+latencia+tradeoffs"
+  },
+
+  // ─── Spanish Block 2 ───
+  "Básico de LangChain": {
+    desc: "LangChain es un framework de código abierto para construir aplicaciones con LLMs. Proporciona herramientas para encadenar prompts, conectar fuentes de datos y gestionar memoria de conversación.",
+    gemini: "https://gemini.google.com/app?q=Qu%C3%A9+es+LangChain+explicado+de+forma+simple",
+    yt: "https://www.youtube.com/results?search_query=tutorial+LangChain+principiantes"
+  },
+  "LangGraph para flujos": {
+    desc: "LangGraph extiende LangChain con orquestación de flujo de trabajo basada en grafos. Modela procesos de IA como nodos y aristas — ideal para sistemas de múltiples pasos donde la IA decide qué hacer a continuación.",
+    gemini: "https://gemini.google.com/app?q=Qu%C3%A9+es+LangGraph+flujos+de+trabajo+IA",
+    yt: "https://www.youtube.com/results?search_query=tutorial+LangGraph"
+  },
+  "Agentes y cadenas": {
+    desc: "Una cadena es una secuencia fija de llamadas LLM. Un agente decide autónomamente qué herramientas usar y en qué orden. Los agentes son flexibles pero más difíciles de controlar.",
+    gemini: "https://gemini.google.com/app?q=Agentes+de+IA+vs+cadenas+LangChain",
+    yt: "https://www.youtube.com/results?search_query=agentes+vs+cadenas+IA"
+  },
+  "Máquinas de estado": {
+    desc: "Las máquinas de estado definen los estados posibles de un sistema y las transiciones. En flujos de trabajo de IA, garantizan que el sistema sepa dónde está en un proceso y qué acciones son válidas a continuación.",
+    gemini: "https://gemini.google.com/app?q=Qu%C3%A9+es+m%C3%A1quina+de+estado+en+IA",
+    yt: "https://www.youtube.com/results?search_query=m%C3%A1quina+de+estado+explicado"
+  },
+  "Tool calling": {
+    desc: "Tool calling (llamada de función) permite que los LLMs activen funciones externas — buscar, consultar bases de datos, enviar correos — según las necesidades del usuario. Es cómo la IA pasa de la conversación a la acción.",
+    gemini: "https://gemini.google.com/app?q=Qu%C3%A9+es+tool+calling+LLM",
+    yt: "https://www.youtube.com/results?search_query=LLM+function+calling+explicado"
+  },
+  "Patrones de orquestación": {
+    desc: "La orquestación coordina múltiples componentes de IA — secuencialmente, en paralelo o condicionalmente. Patrones como map-reduce, routing y fan-out estructuran sistemas de IA complejos.",
+    gemini: "https://gemini.google.com/app?q=Patrones+de+orquestaci%C3%B3n+de+IA",
+    yt: "https://www.youtube.com/results?search_query=patrones+orquestaci%C3%B3n+IA"
+  },
+
+  // ─── Spanish Block 3 ───
+  "Criterios de selección de modelos": {
+    desc: "Elegir modelos implica trade-offs: capacidad vs coste, velocidad vs precisión, código abierto vs propietario. Factores clave: tipo de tarea, sensibilidad de datos, requisitos de latencia, presupuesto.",
+    gemini: "https://gemini.google.com/app?q=C%C3%B3mo+elegir+modelo+de+IA",
+    yt: "https://www.youtube.com/results?search_query=gu%C3%ADa+selecci%C3%B3n+modelo+IA"
+  },
+  "Modelos abiertos vs cerrados": {
+    desc: "Modelos cerrados (GPT-4, Claude) accesibles vía API — fáciles pero pagas por llamada. Modelos abiertos (Llama, Mistral) corren en tu infraestructura — más control, más complejidad.",
+    gemini: "https://gemini.google.com/app?q=Modelos+de+IA+abiertos+vs+cerrados",
+    yt: "https://www.youtube.com/results?search_query=modelos+abiertos+vs+cerrados+LLM"
+  },
+  "Pipelines de datos": {
+    desc: "Los pipelines de datos automatizan el flujo desde fuentes brutas hasta datos limpios y estructurados listos para IA. Incluyen extracción, transformación, validación, carga (ETL). Pipelines rotos = IA rota.",
+    gemini: "https://gemini.google.com/app?q=Qu%C3%A9+es+pipeline+de+datos",
+    yt: "https://www.youtube.com/results?search_query=pipeline+de+datos+explicado"
+  },
+  "Métricas de calidad de datos": {
+    desc: "Medido por: completitud (sin campos faltantes), precisión (valores correctos), consistencia (mismo formato), puntualidad (actualizado), unicidad (sin duplicados). Mala calidad es la causa #1 de fallo de IA.",
+    gemini: "https://gemini.google.com/app?q=M%C3%A9tricas+de+calidad+de+datos+IA",
+    yt: "https://www.youtube.com/results?search_query=m%C3%A9tricas+calidad+datos"
+  },
+  "Embeddings": {
+    desc: "Representaciones numéricas de texto en espacio de alta dimensión. Conceptos similares quedan cerca. Potencian búsqueda semántica — encontrar documentos por significado, no solo palabras clave.",
+    gemini: "https://gemini.google.com/app?q=Qu%C3%A9+son+embeddings+en+IA",
+    yt: "https://www.youtube.com/results?search_query=embeddings+IA+explicado"
+  },
+  "Bases de datos vectoriales": {
+    desc: "Almacenan embeddings y permiten búsqueda rápida de similitud. En lugar de coincidencias exactas, encuentran los documentos semánticamente más similares. Esencial para sistemas RAG.",
+    gemini: "https://gemini.google.com/app?q=Qu%C3%A9+es+base+de+datos+vectorial",
+    yt: "https://www.youtube.com/results?search_query=base+vectorial+explicado"
+  },
+
+  // ─── Spanish Block 4 ───
+  "Qué es RAG": {
+    desc: "Retrieval-Augmented Generation combina recuperación de documentos con generación de LLM. La IA responde solo del contexto recuperado, reduciendo alucinación y permitiendo uso de datos privados.",
+    gemini: "https://gemini.google.com/app?q=Qu%C3%A9+es+RAG+explicado",
+    yt: "https://www.youtube.com/results?search_query=RAG+explicado"
+  },
+  "Búsqueda vectorial": {
+    desc: "Encuentra documentos semánticamente similares comparando vectores de embedding usando métricas de distancia (similitud coseno). Cómo RAG encuentra los documentos correctos para dar al LLM.",
+    gemini: "https://gemini.google.com/app?q=Qu%C3%A9+es+b%C3%BAsqueda+vectorial",
+    yt: "https://www.youtube.com/results?search_query=b%C3%BAsqueda+vectorial+explicado"
+  },
+  "Chunking de documentos": {
+    desc: "Divide documentos grandes en piezas más pequeñas antes de incorporarlos. El tamaño del chunk afecta la recuperación — muy grande significa impreciso, muy pequeño pierde contexto. Decisión clave de diseño RAG.",
+    gemini: "https://gemini.google.com/app?q=Chunking+de+documentos+RAG",
+    yt: "https://www.youtube.com/results?search_query=document+chunking+RAG"
+  },
+  "pgvector / Pinecone": {
+    desc: "pgvector añade almacenamiento vectorial a PostgreSQL. Pinecone es servicio gestionado de base vectorial. Ambos almacenan embeddings y ejecutan búsqueda de similitud — infraestructura central RAG.",
+    gemini: "https://gemini.google.com/app?q=pgvector+vs+Pinecone",
+    yt: "https://www.youtube.com/results?search_query=pgvector+pinecone"
+  },
+  "Reranking": {
+    desc: "Después de que la búsqueda vectorial recupere los principales candidatos, un reranker los puntúa de nuevo con un modelo más potente para relevancia verdadera. Esta 'segunda pasada' mejora significativamente la calidad RAG.",
+    gemini: "https://gemini.google.com/app?q=Qu%C3%A9+es+reranking+RAG",
+    yt: "https://www.youtube.com/results?search_query=reranking+RAG"
+  },
+  "Inputs multimodales": {
+    desc: "Procesa múltiples tipos de datos — texto, imágenes, audio, video — en un modelo. GPT-4o y Gemini son multimodales. Permite 'describir esta foto' o 'transcribir esta reunión'.",
+    gemini: "https://gemini.google.com/app?q=Qu%C3%A9+es+IA+multimodal",
+    yt: "https://www.youtube.com/results?search_query=IA+multimodal+explicado"
+  },
+
+  // ─── Spanish Block 5 ───
+  "Fine-tuning vs RAG": {
+    desc: "Fine-tuning entrena un modelo con tus datos — caro, lento, conocimiento queda permanente. RAG mantiene conocimiento externo y actualizable. La mayoría de casos de negocio deben empezar con RAG.",
+    gemini: "https://gemini.google.com/app?q=Fine-tuning+vs+RAG",
+    yt: "https://www.youtube.com/results?search_query=fine+tuning+vs+RAG"
+  },
+  "LoRA y QLoRA": {
+    desc: "Técnicas eficientes de fine-tuning reduciendo computación y memoria necesarias para adaptar modelos grandes. Hacen el fine-tuning viable sin clusters masivos de GPU.",
+    gemini: "https://gemini.google.com/app?q=Qu%C3%A9+es+LoRA+QLoRA",
+    yt: "https://www.youtube.com/results?search_query=LoRA+QLoRA+explicado"
+  },
+  "MLflow para seguimiento": {
+    desc: "Plataforma de código abierto rastreando experimentos de ML — registrando parámetros, métricas, versiones de modelo para comparar ejecuciones y reproducir resultados. Control de versiones para experimentos de IA.",
+    gemini: "https://gemini.google.com/app?q=Qu%C3%A9+es+MLflow",
+    yt: "https://www.youtube.com/results?search_query=tutorial+MLflow"
+  },
+  "Pipelines con ZenML": {
+    desc: "Framework para pipelines de ML reproducibles. Abstrae preocupaciones de infraestructura para que definas procesamiento de datos y entrenamiento en Python y ejecutes en cualquier lugar — localmente o en la nube.",
+    gemini: "https://gemini.google.com/app?q=Qu%C3%A9+es+ZenML",
+    yt: "https://www.youtube.com/results?search_query=tutorial+ZenML"
+  },
+  "Versionado de modelos": {
+    desc: "Rastrea cada versión del modelo — datos de entrenamiento, parámetros, rendimiento. Permite rollback si nuevo modelo tiene rendimiento inferior en producción.",
+    gemini: "https://gemini.google.com/app?q=Versionado+de+modelos+MLOps",
+    yt: "https://www.youtube.com/results?search_query=versionado+modelos+MLOps"
+  },
+  "Gestión de experimentos": {
+    desc: "Ejecutar, registrar y comparar experimentos de IA sistemáticamente — cambiando una variable por vez para entender qué impulsa mejora de rendimiento.",
+    gemini: "https://gemini.google.com/app?q=Gesti%C3%B3n+de+experimentos+ML",
+    yt: "https://www.youtube.com/results?search_query=gesti%C3%B3n+experimentos+ML"
+  },
+
+  // ─── Spanish Block 6 ───
+  "Básico de AWS / GCP / Azure": {
+    desc: "Tres principales plataformas de nube. AWS (Amazon), GCP (Google), Azure (Microsoft) ofrecen computación, almacenamiento, bases de datos, servicios gestionados de IA. Cada uno tiene fortalezas en IA — SageMaker, Vertex AI, Azure AI Studio.",
+    gemini: "https://gemini.google.com/app?q=AWS+vs+GCP+vs+Azure+IA",
+    yt: "https://www.youtube.com/results?search_query=comparaci%C3%B3n+AWS+GCP+Azure"
+  },
+  "Contenedores Docker": {
+    desc: "Empaqueta aplicación y dependencias en 'contenedor' portátil que ejecuta idénticamente en cualquier lugar. Para IA, garantiza que modelo, código, bibliotecas se comporten igual en desarrollo y producción.",
+    gemini: "https://gemini.google.com/app?q=Qu%C3%A9+es+contenedor+Docker",
+    yt: "https://www.youtube.com/results?search_query=contenedores+docker+explicado"
+  },
+  "CI/CD para IA": {
+    desc: "Integración/Despliegue Continuo automatiza prueba e implantación de cambios. Para IA: automáticamente re-entrenar, probar, desplegar nuevas versiones del modelo cuando datos o código cambian.",
+    gemini: "https://gemini.google.com/app?q=CI+CD+para+IA",
+    yt: "https://www.youtube.com/results?search_query=CI+CD+machine+learning"
+  },
+  "Despliegue de APIs": {
+    desc: "Envolver IA en servicio web (FastAPI, Flask) para que otras aplicaciones puedan llamarla. Forma estándar de hacer IA disponible para productos, sitios web, herramientas internas.",
+    gemini: "https://gemini.google.com/app?q=Desplegar+modelo+IA+como+API",
+    yt: "https://www.youtube.com/results?search_query=desplegar+modelo+IA+API"
+  },
+  "Monitorización y alertas": {
+    desc: "IA en producción necesita monitorización continua — rastreando latencia, errores, calidad de salida. Las alertas notifican al equipo cuando algo se degrada. Sin monitorización, no sabrás que la IA se rompió hasta que los usuarios se quejen.",
+    gemini: "https://gemini.google.com/app?q=Monitorizaci%C3%B3n+modelo+IA+producci%C3%B3n",
+    yt: "https://www.youtube.com/results?search_query=monitorizaci%C3%B3n+modelo+IA"
+  },
+  "Optimización de costes": {
+    desc: "Los costes de IA en la nube pueden crecer rápidamente. Optimizaciones: caché de consultas repetidas, uso de modelos más pequeños para tareas simples, agrupación de solicitudes, dimensionamiento correcto de infraestructura.",
+    gemini: "https://gemini.google.com/app?q=Optimizaci%C3%B3n+de+costes+IA+nube",
+    yt: "https://www.youtube.com/results?search_query=optimizaci%C3%B3n+costes+IA"
+  },
+
+  // ─── Spanish Block 7 ───
+  "Métricas de evaluación de LLMs": {
+    desc: "Más allá de la precisión: BLEU (similitud de texto), ROUGE (recall), puntuaciones humanas específicas de la tarea. Los sistemas de producción usan métricas automatizadas más evaluación humana periódica.",
+    gemini: "https://gemini.google.com/app?q=M%C3%A9tricas+de+evaluaci%C3%B3n+LLM",
+    yt: "https://www.youtube.com/results?search_query=m%C3%A9tricas+evaluaci%C3%B3n+LLM"
+  },
+  "Framework RAGAS": {
+    desc: "Framework de evaluación para sistemas RAG. Mide fidelidad (sin alucinación), relevancia de respuesta, precisión de contexto, recall de contexto — cuatro pilares de calidad RAG.",
+    gemini: "https://gemini.google.com/app?q=Qu%C3%A9+es+framework+RAGAS",
+    yt: "https://www.youtube.com/results?search_query=framework+RAGAS+RAG"
+  },
+  "A/B testing en IA": {
+    desc: "Ejecutar dos versiones de modelo simultáneamente, dividiendo tráfico para comparar cuál funciona mejor con usuarios reales. Forma rigurosa de validar nuevo modelo antes del lanzamiento completo.",
+    gemini: "https://gemini.google.com/app?q=A+B+testing+modelos+de+IA",
+    yt: "https://www.youtube.com/results?search_query=AB+testing+modelos+IA"
+  },
+  "Observabilidad": {
+    desc: "Entender qué hace el sistema de IA internamente — rastrear solicitudes a través del pipeline, registrar pasos intermedios, depurar fallos. Herramientas como LangSmith proporcionan esto.",
+    gemini: "https://gemini.google.com/app?q=Observabilidad+de+sistema+IA",
+    yt: "https://www.youtube.com/results?search_query=observabilidad+IA+LLM"
+  },
+  "Revisión del proyecto final": {
+    desc: "Presentar sistema de IA desplegado a compañeros, recorrer decisiones de arquitectura, demostrar sistema en vivo, reflexionar sobre qué harías diferente.",
+    gemini: "https://gemini.google.com/app?q=Portfolio+proyecto+ingenier%C3%ADa+IA",
+    yt: "https://www.youtube.com/results?search_query=portfolio+ingenier%C3%ADa+IA"
+  },
+  "Presentación del portafolio": {
+    desc: "El portafolio demuestra competencia en Ingeniería de IA. Muestra tres sistemas completos — problema hasta solución desplegada — con diagramas de arquitectura, código, resultados de evaluación.",
+    gemini: "https://gemini.google.com/app?q=Consejos+portfolio+ingeniero+IA",
+    yt: "https://www.youtube.com/results?search_query=portfolio+ingeniero+IA"
+  }
+
+};
+
+function getTopicInfo(label) {
+  if (TOPIC_INFO[label]) return TOPIC_INFO[label];
+  // Fallback: fuzzy match
+  const norm = label.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  for (const [k, v] of Object.entries(TOPIC_INFO)) {
+    const kn = k.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+    if (kn === norm || kn.includes(norm) || norm.includes(kn)) return v;
+  }
+  return null;
+}
+
+
+function toggleTopic(chipEl, label, blockIdx) {
+  const panel = document.getElementById('topic-panel-' + blockIdx);
+  const allChips = chipEl.parentElement.querySelectorAll('.chip');
+  const isActive = chipEl.classList.contains('active');
+  
+  allChips.forEach(c => c.classList.remove('active'));
+  
+  if (isActive) {
+    panel.innerHTML = '';
+    panel.classList.remove('open');
+    return;
+  }
+  
+  chipEl.classList.add('active');
+  const info = getTopicInfo(label);
+  
+  if (!info) {
+    panel.innerHTML = '<div class="topic-panel-desc">Search online to learn more about: <strong>' + label + '</strong></div>';
+  } else {
+    panel.innerHTML = `
+      <div class="topic-panel-title">${label}</div>
+      <div class="topic-panel-desc">${info.desc}</div>
+      <div class="topic-panel-links">
+        <a class="topic-link gemini" href="${info.gemini}" target="_blank" rel="noopener">Ask Gemini ↗</a>
+        <a class="topic-link yt" href="${info.yt}" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+      </div>
+    `;
+  }
+  
+  panel.classList.add('open');
+  setTimeout(() => {
+    panel.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+  }, 100);
+}
+
+applyStaticTranslations();
+renderNav();
+renderBlock(0);
+renderHeroBlocks();
+</script>
+</body>
+</html>
